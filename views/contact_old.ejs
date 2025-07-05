@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="/">MBC Laboratory</a>
+            </div>
+            <div class="nav-menu" id="nav-menu">
+                <a href="/" class="nav-link <%= currentPage === 'home' ? 'active' : '' %>">Home</a>
+                <a href="/services" class="nav-link <%= currentPage === 'services' ? 'active' : '' %>">Services</a>
+                <a href="/contact" class="nav-link <%= currentPage === 'contact' ? 'active' : '' %>">Contact</a>
+                <a href="/developer" class="nav-link <%= currentPage === 'developer' ? 'active' : '' %>">Developer</a>
+            </div>
+            <div class="nav-toggle" id="nav-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contact Hero -->
+    <section class="page-hero">
+        <div class="container">
+            <h1>Hubungi Kami</h1>
+            <p>Konsultasikan kebutuhan teknologi Anda dengan tim ahli kami</p>
+        </div>
+    </section>
+
+    <!-- Success Message -->
+    <% if (typeof success !== 'undefined' && success) { %>
+    <div class="alert alert-success">
+        <div class="container">
+            <i class="fas fa-check-circle"></i>
+            <%= success %>
+        </div>
+    </div>
+    <% } %>
+
+    <!-- Contact Section -->
+    <section class="contact-section">
+        <div class="container">
+            <div class="contact-grid">
+                <!-- Contact Info -->
+                <div class="contact-info">
+                    <h2>Informasi Kontak</h2>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h3>Alamat</h3>
+                            <p>Indonesia<br>
+                            (Lokasi dapat ditentukan sesuai kebutuhan)</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h3>Email</h3>
+                            <p>info@mbclaboratory.com<br>
+                            support@mbclaboratory.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h3>Telepon</h3>
+                            <p>+62 xxx-xxxx-xxxx<br>
+                            (Jam operasional: 09:00 - 17:00 WIB)</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <h3>Jam Operasional</h3>
+                            <p>Senin - Jumat: 09:00 - 17:00 WIB<br>
+                            Sabtu: 09:00 - 13:00 WIB<br>
+                            Minggu: Tutup</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="contact-form">
+                    <h2>Kirim Pesan</h2>
+                    <form action="/contact" method="POST" id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Nama Lengkap *</label>
+                            <input type="text" id="name" name="name" required 
+                                   value="<%= typeof formData !== 'undefined' ? formData.name || '' : '' %>">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required 
+                                   value="<%= typeof formData !== 'undefined' ? formData.email || '' : '' %>">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="service">Layanan yang Diminati</label>
+                            <select id="service" name="service">
+                                <option value="">Pilih Layanan</option>
+                                <option value="cybersecurity" <%= typeof formData !== 'undefined' && formData.service === 'cybersecurity' ? 'selected' : '' %>>Cybersecurity Solutions</option>
+                                <option value="bigdata" <%= typeof formData !== 'undefined' && formData.service === 'bigdata' ? 'selected' : '' %>>Big Data Analytics</option>
+                                <option value="gametech" <%= typeof formData !== 'undefined' && formData.service === 'gametech' ? 'selected' : '' %>>Game Technology</option>
+                                <option value="gis" <%= typeof formData !== 'undefined' && formData.service === 'gis' ? 'selected' : '' %>>Geographic Information Systems</option>
+                                <option value="consultation" <%= typeof formData !== 'undefined' && formData.service === 'consultation' ? 'selected' : '' %>>Konsultasi Umum</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Pesan *</label>
+                            <textarea id="message" name="message" rows="5" required 
+                                      placeholder="Deskripsikan kebutuhan Anda atau pertanyaan yang ingin disampaikan..."><%= typeof formData !== 'undefined' ? formData.message || '' : '' %></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                            Kirim Pesan
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map Section (Placeholder) -->
+    <section class="map-section">
+        <div class="container">
+            <h2>Lokasi Kami</h2>
+            <div class="map-placeholder">
+                <i class="fas fa-map-marked-alt"></i>
+                <p>Peta lokasi akan ditampilkan di sini<br>
+                (Dapat diintegrasikan dengan Google Maps API)</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3>Berapa lama waktu pengerjaan proyek?</h3>
+                    <p>Waktu pengerjaan bervariasi tergantung kompleksitas proyek. Umumnya 2-8 minggu untuk proyek standar.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Apakah menyediakan maintenance setelah proyek selesai?</h3>
+                    <p>Ya, kami menyediakan layanan maintenance dan support berkelanjutan sesuai dengan paket yang dipilih.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Bagaimana proses konsultasi awal?</h3>
+                    <p>Konsultasi awal dapat dilakukan melalui email, telepon, atau meeting online untuk memahami kebutuhan Anda.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Apakah ada garansi untuk layanan yang diberikan?</h3>
+                    <p>Ya, kami memberikan garansi sesuai dengan jenis layanan dan kesepakatan kontrak.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>MBC Laboratory</h3>
+                    <p>Pusat Riset Teknologi dan Konsultan Cybersecurity, Big Data Analytics, Game Technology, dan Geographic Information Systems (GIS).</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Kontak</h3>
+                    <p><i class="fas fa-envelope"></i> info@mbclaboratory.com</p>
+                    <p><i class="fas fa-phone"></i> +62 xxx-xxxx-xxxx</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Indonesia</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Layanan</h3>
+                    <ul>
+                        <li>Cybersecurity Solutions</li>
+                        <li>Big Data Analytics</li>
+                        <li>Game Technology</li>
+                        <li>Geographic Information Systems</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 MBC Laboratory. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>
