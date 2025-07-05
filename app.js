@@ -1,11 +1,15 @@
 const express = require('express');
 const path = require('path');
 const nodemailer = require('nodemailer');
+const contactDB = require('./contact-db'); // Import database functions
+const emailTemplates = require('./email-templates'); // Import email templates
+const formValidation = require('./form-validation'); // Import form validation
+require('dotenv').config(); // Load environment variables
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Email configuration (for demonstration - use environment variables in production)
+// Email configuration (gunakan credentials dari .env file)
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -13,6 +17,13 @@ const transporter = nodemailer.createTransport({
         pass: process.env.EMAIL_PASS || 'demo_password'
     }
 });
+
+// Test email configuration
+if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+    console.log('✅ Email configuration loaded');
+} else {
+    console.log('⚠️  Email not configured - using console logging only');
+}
 
 // Set EJS as template engine
 app.set('view engine', 'ejs');
@@ -52,53 +63,86 @@ app.get('/developer', (req, res) => {
     });
 });
 
+// Admin dashboard page
+app.get('/admin', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'admin-dashboard.html'));
+});
+
 // Contact form handler with email functionality
 app.post('/contact', async (req, res) => {
-    const { name, email, message, service } = req.body;
+    const clientIP = req.ip || req.connection.remoteAddress || 'unknown';
+    
+    // Rate limiting check
+    const rateLimit = formValidation.checkRateLimit(clientIP);
+    if (!rateLimit.allowed) {
+        return res.status(429).render('contact', {
+            title: 'Contact Us - MBC Laboratory',
+            currentPage: 'contact',
+            error: `Too many requests. Please try again in ${rateLimit.resetTime} seconds.`,
+            formData: req.body
+        });
+    }
+    
+    // Sanitize input data
+    const sanitizedData = formValidation.sanitizeInput(req.body);
+    const { name, email, message, service } = sanitizedData;
+    
+    // Validate form data
+    const validation = formValidation.validateContactForm(sanitizedData);
+    if (!validation.isValid) {
+        return res.render('contact', {
+            title: 'Contact Us - MBC Laboratory',
+            currentPage: 'contact',
+            error: validation.errors.join(', '),
+            formData: req.body
+        });
+    }
     
     try {
+        // Save to database
+        await contactDB.saveContactForm({ name, email, message, service });
+        console.log('💾 Contact form submission saved to database');
+
         // Email to admin
+        const adminTemplate = emailTemplates.adminNotification({ name, email, message, service });
         const adminMailOptions = {
             from: email,
-            to: 'admin@mbclaboratory.com',
-            subject: `New Contact Form Submission - ${service}`,
-            html: `
-                <h2>New Contact Form Submission</h2>
-                <p><strong>Name:</strong> ${name}</p>
-                <p><strong>Email:</strong> ${email}</p>
-                <p><strong>Service:</strong> ${service}</p>
-                <p><strong>Message:</strong></p>
-                <p>${message}</p>
-                <hr>
-                <p><em>Sent from MBC Laboratory Contact Form</em></p>
-            `
+            to: process.env.ADMIN_EMAIL || 'admin@mbclaboratory.com',
+            subject: adminTemplate.subject,
+            html: adminTemplate.html
         };
 
         // Confirmation email to user
+        const userTemplate = emailTemplates.userConfirmation({ name, email, message, service });
         const userMailOptions = {
-            from: 'noreply@mbclaboratory.com',
+            from: process.env.EMAIL_USER || 'noreply@mbclaboratory.com',
             to: email,
-            subject: 'Thank you for contacting MBC Laboratory',
-            html: `
-                <h2>Thank you for your inquiry!</h2>
-                <p>Dear ${name},</p>
-                <p>We have received your message regarding our <strong>${service}</strong> service.</p>
-                <p>Our team will review your inquiry and get back to you within 24-48 hours.</p>
-                <p>Best regards,<br>MBC Laboratory Team</p>
-            `
+            subject: userTemplate.subject,
+            html: userTemplate.html
         };
 
-        // Send emails (commented for demo - uncomment when email credentials are set)
-        // await transporter.sendMail(adminMailOptions);
-        // await transporter.sendMail(userMailOptions);
+        // Send emails jika email sudah dikonfigurasi
+        if (process.env.EMAIL_USER && process.env.EMAIL_PASS && 
+            process.env.EMAIL_USER !== 'demo@mbclaboratory.com') {
+            await transporter.sendMail(adminMailOptions);
+            await transporter.sendMail(userMailOptions);
+            console.log('📧 Emails sent successfully!');
+        } else {
+            console.log('📧 Email not configured - check .env file');
+        }
+        
+        // Save to database
+        const savedContact = contactDB.saveContact({ name, email, message, service });
         
         // Log to terminal (for demonstration)
         console.log('=== Contact Form Submission ===');
+        console.log(`ID: ${savedContact.id}`);
         console.log(`Name: ${name}`);
         console.log(`Email: ${email}`);
         console.log(`Service: ${service}`);
         console.log(`Message: ${message}`);
         console.log(`Time: ${new Date().toISOString()}`);
+        console.log(`Saved to database: ✅`);
         console.log('==============================');
         
         res.render('contact', { 
@@ -108,7 +152,7 @@ app.post('/contact', async (req, res) => {
             formData: { name, email, message, service }
         });
     } catch (error) {
-        console.error('Email error:', error);
+        console.error('Error handling contact form submission:', error);
         res.render('contact', { 
             title: 'Contact Us - MBC Laboratory',
             currentPage: 'contact',
@@ -142,6 +186,39 @@ app.get('/security/status', (req, res) => {
         blockedIPs: 0,
         lastCheck: new Date().toISOString()
     });
+});
+
+// Admin dashboard to view all contacts
+app.get('/admin/contacts', (req, res) => {
+    // Simple auth check (in production, use proper authentication)
+    const authHeader = req.headers.authorization;
+    if (!authHeader || authHeader !== 'Bearer admin123') {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+    
+    const contacts = contactDB.getAllContacts();
+    res.json({
+        total: contacts.length,
+        contacts: contacts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+    });
+});
+
+// Update contact status
+app.put('/admin/contacts/:id/status', (req, res) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || authHeader !== 'Bearer admin123') {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+    
+    const { id } = req.params;
+    const { status } = req.body;
+    
+    const updatedContact = contactDB.updateContactStatus(id, status);
+    if (updatedContact) {
+        res.json(updatedContact);
+    } else {
+        res.status(404).json({ error: 'Contact not found' });
+    }
 });
 
 // 404 handler
