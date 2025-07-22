@@ -1,0 +1,179 @@
+<svg width="800" height="400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="aiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7c3aed;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#a855f7;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#ec4899;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f97316;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="url(#aiGrad)"/>
+  
+  <!-- AI Brain visualization -->
+  <g fill="rgba(255,255,255,0.9)" transform="translate(300, 120)">
+    <!-- Main brain outline -->
+    <path d="M50 20 Q70 10 90 20 Q110 10 130 20 Q140 30 140 50 Q130 70 120 80 Q100 90 80 85 Q60 90 40 80 Q30 70 30 50 Q30 30 50 20 Z"/>
+    
+    <!-- Neural network pattern inside brain -->
+    <g opacity="0.7">
+      <circle cx="50" cy="40" r="3" fill="rgba(255,255,255,0.8)"/>
+      <circle cx="70" cy="35" r="3" fill="rgba(255,255,255,0.8)"/>
+      <circle cx="90" cy="40" r="3" fill="rgba(255,255,255,0.8)"/>
+      <circle cx="110" cy="35" r="3" fill="rgba(255,255,255,0.8)"/>
+      <circle cx="60" cy="55" r="3" fill="rgba(255,255,255,0.8)"/>
+      <circle cx="80" cy="60" r="3" fill="rgba(255,255,255,0.8)"/>
+      <circle cx="100" cy="55" r="3" fill="rgba(255,255,255,0.8)"/>
+      
+      <!-- Neural connections -->
+      <line x1="50" y1="40" x2="70" y2="35" stroke="rgba(255,255,255,0.6)" stroke-width="1"/>
+      <line x1="70" y1="35" x2="90" y2="40" stroke="rgba(255,255,255,0.6)" stroke-width="1"/>
+      <line x1="90" y1="40" x2="110" y2="35" stroke="rgba(255,255,255,0.6)" stroke-width="1"/>
+      <line x1="70" y1="35" x2="60" y2="55" stroke="rgba(255,255,255,0.6)" stroke-width="1"/>
+      <line x1="90" y1="40" x2="80" y2="60" stroke="rgba(255,255,255,0.6)" stroke-width="1"/>
+      <line x1="110" y1="35" x2="100" y2="55" stroke="rgba(255,255,255,0.6)" stroke-width="1"/>
+      <line x1="60" y1="55" x2="80" y2="60" stroke="rgba(255,255,255,0.6)" stroke-width="1"/>
+      <line x1="80" y1="60" x2="100" y2="55" stroke="rgba(255,255,255,0.6)" stroke-width="1"/>
+    </g>
+  </g>
+  
+  <!-- Cybersecurity elements -->
+  <g fill="rgba(255,255,255,0.8)">
+    <!-- Security monitoring dashboard -->
+    <g transform="translate(80, 220)">
+      <rect x="0" y="0" width="80" height="50" rx="5" fill="rgba(255,255,255,0.1)"/>
+      <rect x="5" y="5" width="70" height="35" rx="3" fill="rgba(0,0,0,0.6)"/>
+      
+      <!-- Dashboard elements -->
+      <rect x="8" y="8" width="15" height="8" fill="rgba(34,197,94,0.8)"/>
+      <rect x="25" y="8" width="15" height="8" fill="rgba(239,68,68,0.8)"/>
+      <rect x="42" y="8" width="15" height="8" fill="rgba(245,158,11,0.8)"/>
+      <rect x="59" y="8" width="13" height="8" fill="rgba(59,130,246,0.8)"/>
+      
+      <!-- Threat indicators -->
+      <circle cx="15" cy="25" r="3" fill="rgba(239,68,68,0.8)"/>
+      <circle cx="32" cy="28" r="2" fill="rgba(245,158,11,0.8)"/>
+      <circle cx="50" cy="26" r="2" fill="rgba(34,197,94,0.8)"/>
+      <circle cx="65" cy="30" r="3" fill="rgba(239,68,68,0.8)"/>
+      
+      <!-- Alert lines -->
+      <line x1="15" y1="25" x2="32" y2="28" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+      <line x1="32" y1="28" x2="50" y2="26" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+      <line x1="50" y1="26" x2="65" y2="30" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+    </g>
+    
+    <!-- AI processing unit -->
+    <g transform="translate(600, 200)">
+      <rect x="0" y="0" width="60" height="60" rx="8" fill="rgba(255,255,255,0.1)"/>
+      <rect x="10" y="10" width="40" height="40" rx="5" fill="rgba(124,58,237,0.6)"/>
+      
+      <!-- Processing indicators -->
+      <circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.9)"/>
+      <circle cx="30" cy="25" r="2" fill="rgba(255,255,255,0.9)"/>
+      <circle cx="40" cy="20" r="2" fill="rgba(255,255,255,0.9)"/>
+      <circle cx="25" cy="35" r="2" fill="rgba(255,255,255,0.9)"/>
+      <circle cx="35" cy="40" r="2" fill="rgba(255,255,255,0.9)"/>
+      
+      <!-- AI chip pattern -->
+      <rect x="25" y="15" width="10" height="2" fill="rgba(255,255,255,0.7)"/>
+      <rect x="25" y="20" width="10" height="2" fill="rgba(255,255,255,0.7)"/>
+      <rect x="25" y="25" width="10" height="2" fill="rgba(255,255,255,0.7)"/>
+    </g>
+    
+    <!-- Data flow visualization -->
+    <g transform="translate(200, 280)">
+      <!-- Data packets -->
+      <rect x="0" y="0" width="8" height="8" rx="1" fill="rgba(59,130,246,0.8)"/>
+      <rect x="15" y="0" width="8" height="8" rx="1" fill="rgba(16,185,129,0.8)"/>
+      <rect x="30" y="0" width="8" height="8" rx="1" fill="rgba(245,158,11,0.8)"/>
+      <rect x="45" y="0" width="8" height="8" rx="1" fill="rgba(239,68,68,0.8)"/>
+      
+      <!-- Flow arrows -->
+      <polygon points="60,2 70,4 60,6" fill="rgba(255,255,255,0.8)"/>
+      <polygon points="80,2 90,4 80,6" fill="rgba(255,255,255,0.8)"/>
+      <polygon points="100,2 110,4 100,6" fill="rgba(255,255,255,0.8)"/>
+      
+      <!-- AI analysis result -->
+      <rect x="120" y="-5" width="30" height="18" rx="3" fill="rgba(239,68,68,0.8)"/>
+      <text x="135" y="6" text-anchor="middle" font-family="Inter" font-size="8" font-weight="bold" fill="white">THREAT</text>
+    </g>
+    
+    <!-- Network nodes with AI analysis -->
+    <g transform="translate(450, 300)">
+      <circle cx="20" cy="20" r="8" fill="rgba(255,255,255,0.9)"/>
+      <circle cx="50" cy="10" r="6" fill="rgba(255,255,255,0.7)"/>
+      <circle cx="50" cy="30" r="6" fill="rgba(255,255,255,0.7)"/>
+      <circle cx="80" cy="20" r="8" fill="rgba(255,255,255,0.9)"/>
+      
+      <!-- AI threat detection indicators -->
+      <circle cx="50" cy="10" r="3" fill="rgba(239,68,68,0.8)"/>
+      <circle cx="80" cy="20" r="3" fill="rgba(34,197,94,0.8)"/>
+      
+      <!-- Network connections -->
+      <line x1="28" y1="20" x2="44" y2="10" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
+      <line x1="28" y1="20" x2="44" y2="30" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
+      <line x1="56" y1="10" x2="72" y2="20" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
+      <line x1="56" y1="30" x2="72" y2="20" stroke="rgba(255,255,255,0.6)" stroke-width="2"/>
+    </g>
+  </g>
+  
+  <!-- Innovation indicators -->
+  <g transform="translate(100, 100)">
+    <!-- Innovation lightbulb -->
+    <circle cx="20" cy="25" r="10" fill="rgba(255,255,255,0.2)"/>
+    <rect x="17" y="33" width="6" height="8" rx="1" fill="rgba(255,255,255,0.8)"/>
+    <circle cx="20" cy="25" r="6" fill="rgba(245,158,11,0.8)"/>
+    
+    <!-- Innovation sparks -->
+    <circle cx="35" cy="15" r="1" fill="rgba(255,255,255,0.8)"/>
+    <circle cx="30" cy="8" r="1" fill="rgba(255,255,255,0.8)"/>
+    <circle cx="40" cy="10" r="1" fill="rgba(255,255,255,0.8)"/>
+  </g>
+  
+  <!-- Title -->
+  <text x="400" y="80" text-anchor="middle" font-family="Inter, sans-serif" font-size="32" font-weight="bold" fill="white">
+    AI in Cybersecurity
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="400" y="105" text-anchor="middle" font-family="Inter, sans-serif" font-size="16" fill="rgba(255,255,255,0.9)">
+    Innovation &amp; Implementation Seminar
+  </text>
+  
+  <!-- Event details -->
+  <g font-family="Inter, sans-serif" font-size="14" fill="rgba(255,255,255,0.8)">
+    <text x="400" y="125" text-anchor="middle">May 25, 2024 • 13:00 - 18:00</text>
+    <text x="400" y="140" text-anchor="middle">Tech Hub Jakarta • Hybrid Event</text>
+  </g>
+  
+  <!-- AI technologies -->
+  <g font-family="Inter, sans-serif" font-size="12" fill="rgba(255,255,255,0.7)">
+    <text x="60" y="390">Machine Learning</text>
+    <text x="180" y="390">Deep Learning</text>
+    <text x="280" y="390">Neural Networks</text>
+    <text x="390" y="390">Anomaly Detection</text>
+    <text x="510" y="390">Automated Response</text>
+    <text x="630" y="390">Threat Intelligence</text>
+  </g>
+  
+  <!-- Floating AI elements -->
+  <g font-family="JetBrains Mono, monospace" font-size="10" fill="rgba(255,255,255,0.5)" opacity="0.6">
+    <text x="50" y="180">if threat_detected:</text>
+    <text x="600" y="160">ml.predict(anomaly)</text>
+    <text x="100" y="350">automate_response()</text>
+    <text x="500" y="370">ai.analyze(pattern)</text>
+  </g>
+  
+  <!-- Decorative tech elements -->
+  <g opacity="0.4">
+    <circle cx="80" cy="50" r="2" fill="white"/>
+    <circle cx="720" cy="70" r="3" fill="white"/>
+    <circle cx="60" cy="320" r="2" fill="white"/>
+    <circle cx="740" cy="330" r="2" fill="white"/>
+    
+    <!-- Data connection lines -->
+    <path d="M 120 120 Q 200 100 280 120" stroke="rgba(255,255,255,0.3)" stroke-width="1" fill="none"/>
+    <path d="M 520 140 Q 600 120 680 140" stroke="rgba(255,255,255,0.3)" stroke-width="1" fill="none"/>
+  </g>
+</svg>

@@ -1,0 +1,156 @@
+<svg width="800" height="400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#1e293b;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#334155;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#475569;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="url(#cloudGrad)"/>
+  
+  <!-- Cloud infrastructure diagram -->
+  <g fill="rgba(255,255,255,0.9)">
+    <!-- Main cloud shape -->
+    <path d="M200 200 Q180 180 160 200 Q140 180 120 200 Q100 190 100 210 Q100 230 120 230 L380 230 Q400 230 400 210 Q400 190 380 200 Q360 180 340 200 Q320 180 300 200 Q280 180 260 200 Q240 180 220 200 Q200 180 200 200 Z"/>
+    
+    <!-- Smaller supporting clouds -->
+    <path d="M500 150 Q490 140 480 150 Q470 140 460 150 Q450 145 450 155 Q450 165 460 165 L520 165 Q530 165 530 155 Q530 145 520 150 Q510 140 500 150 Z"/>
+    
+    <path d="M550 280 Q540 270 530 280 Q520 270 510 280 Q500 275 500 285 Q500 295 510 295 L570 295 Q580 295 580 285 Q580 275 570 280 Q560 270 550 280 Z"/>
+  </g>
+  
+  <!-- Cloud provider logos simulation -->
+  <g transform="translate(150, 210)">
+    <!-- AWS representation -->
+    <rect x="0" y="0" width="50" height="30" rx="4" fill="rgba(255,153,0,0.9)"/>
+    <text x="25" y="20" text-anchor="middle" font-family="Inter" font-size="12" font-weight="bold" fill="white">AWS</text>
+    
+    <!-- Azure representation -->
+    <rect x="70" y="0" width="50" height="30" rx="4" fill="rgba(0,120,212,0.9)"/>
+    <text x="95" y="20" text-anchor="middle" font-family="Inter" font-size="10" font-weight="bold" fill="white">Azure</text>
+    
+    <!-- GCP representation -->
+    <rect x="140" y="0" width="50" height="30" rx="4" fill="rgba(66,133,244,0.9)"/>
+    <text x="165" y="20" text-anchor="middle" font-family="Inter" font-size="12" font-weight="bold" fill="white">GCP</text>
+  </g>
+  
+  <!-- Security layers visualization -->
+  <g stroke="rgba(255,255,255,0.6)" stroke-width="2" fill="none">
+    <!-- Identity layer -->
+    <ellipse cx="400" cy="250" rx="100" ry="60" stroke-dasharray="5,5" opacity="0.8"/>
+    
+    <!-- Network layer -->
+    <ellipse cx="400" cy="250" rx="130" ry="80" stroke-dasharray="8,4" opacity="0.6"/>
+    
+    <!-- Data layer -->
+    <ellipse cx="400" cy="250" rx="160" ry="100" stroke-dasharray="10,6" opacity="0.4"/>
+  </g>
+  
+  <!-- Security icons around the masterclass theme -->
+  <g fill="rgba(255,255,255,0.8)">
+    <!-- Shield with checkmark -->
+    <g transform="translate(100, 100)">
+      <path d="M20 10 L20 5 Q20 0 25 0 L35 0 Q40 0 40 5 L40 10 Q40 20 30 30 Q20 20 20 10 Z"/>
+      <path d="M25 12 L28 15 L35 8" stroke="rgba(16,185,129,0.9)" stroke-width="2" fill="none"/>
+    </g>
+    
+    <!-- Lock with key -->
+    <g transform="translate(600, 120)">
+      <rect x="15" y="15" width="20" height="15" rx="2" fill="rgba(255,255,255,0.8)"/>
+      <path d="M18 15 L18 10 Q18 5 22.5 5 Q27 5 27 10 L27 15" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="2"/>
+      <circle cx="22.5" cy="8" r="2" fill="rgba(59,130,246,0.8)"/>
+    </g>
+    
+    <!-- Network monitoring -->
+    <g transform="translate(100, 320)">
+      <rect x="0" y="0" width="40" height="25" rx="3" fill="rgba(255,255,255,0.8)"/>
+      <rect x="3" y="3" width="34" height="15" fill="rgba(15,23,42,0.8)"/>
+      <line x1="6" y1="21" x2="37" y2="21" stroke="rgba(16,185,129,0.8)" stroke-width="2"/>
+      <circle cx="30" cy="21" r="2" fill="rgba(239,68,68,0.8)"/>
+    </g>
+    
+    <!-- Configuration dashboard -->
+    <g transform="translate(600, 300)">
+      <rect x="0" y="0" width="35" height="25" rx="3" fill="rgba(255,255,255,0.8)"/>
+      <rect x="3" y="3" width="29" height="4" fill="rgba(59,130,246,0.8)"/>
+      <rect x="3" y="9" width="20" height="3" fill="rgba(16,185,129,0.8)"/>
+      <rect x="3" y="14" width="25" height="3" fill="rgba(245,158,11,0.8)"/>
+      <rect x="3" y="19" width="15" height="3" fill="rgba(168,85,247,0.8)"/>
+    </g>
+  </g>
+  
+  <!-- Masterclass session indicators -->
+  <g transform="translate(450, 140)">
+    <!-- Virtual classroom elements -->
+    <rect x="0" y="0" width="80" height="50" rx="5" fill="rgba(255,255,255,0.1)"/>
+    <rect x="5" y="5" width="70" height="35" rx="3" fill="rgba(15,23,42,0.7)"/>
+    
+    <!-- Video conference grid -->
+    <rect x="8" y="8" width="16" height="12" rx="1" fill="rgba(59,130,246,0.3)"/>
+    <rect x="26" y="8" width="16" height="12" rx="1" fill="rgba(16,185,129,0.3)"/>
+    <rect x="44" y="8" width="16" height="12" rx="1" fill="rgba(245,158,11,0.3)"/>
+    <rect x="62" y="8" width="16" height="12" rx="1" fill="rgba(168,85,247,0.3)"/>
+    
+    <rect x="8" y="22" width="16" height="12" rx="1" fill="rgba(239,68,68,0.3)"/>
+    <rect x="26" y="22" width="16" height="12" rx="1" fill="rgba(6,182,212,0.3)"/>
+    <rect x="44" y="22" width="35" height="12" rx="1" fill="rgba(255,255,255,0.2)"/>
+    
+    <!-- Instructor indicator -->
+    <circle cx="61.5" cy="28" r="3" fill="rgba(255,255,255,0.9)"/>
+  </g>
+  
+  <!-- Title -->
+  <text x="400" y="80" text-anchor="middle" font-family="Inter, sans-serif" font-size="32" font-weight="bold" fill="white">
+    Cloud Security Masterclass
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="400" y="105" text-anchor="middle" font-family="Inter, sans-serif" font-size="16" fill="rgba(255,255,255,0.9)">
+    AWS • Azure • GCP Security Implementation
+  </text>
+  
+  <!-- Event details -->
+  <g font-family="Inter, sans-serif" font-size="14" fill="rgba(255,255,255,0.8)">
+    <text x="400" y="125" text-anchor="middle">3 Days Virtual Event • April 10-12, 2024</text>
+    <text x="400" y="140" text-anchor="middle">Online via Zoom with Hands-on Labs</text>
+  </g>
+  
+  <!-- Compliance badges -->
+  <g transform="translate(50, 150)">
+    <circle cx="20" cy="20" r="18" fill="rgba(34,197,94,0.2)" stroke="rgba(34,197,94,0.8)" stroke-width="2"/>
+    <text x="20" y="15" text-anchor="middle" font-family="Inter" font-size="8" font-weight="bold" fill="rgba(34,197,94,1)">ISO</text>
+    <text x="20" y="25" text-anchor="middle" font-family="Inter" font-size="8" font-weight="bold" fill="rgba(34,197,94,1)">27001</text>
+    
+    <circle cx="60" cy="20" r="18" fill="rgba(59,130,246,0.2)" stroke="rgba(59,130,246,0.8)" stroke-width="2"/>
+    <text x="60" y="18" text-anchor="middle" font-family="Inter" font-size="8" font-weight="bold" fill="rgba(59,130,246,1)">SOC2</text>
+    <text x="60" y="26" text-anchor="middle" font-family="Inter" font-size="8" font-weight="bold" fill="rgba(59,130,246,1)">Type II</text>
+    
+    <circle cx="100" cy="20" r="18" fill="rgba(168,85,247,0.2)" stroke="rgba(168,85,247,0.8)" stroke-width="2"/>
+    <text x="100" y="25" text-anchor="middle" font-family="Inter" font-size="10" font-weight="bold" fill="rgba(168,85,247,1)">GDPR</text>
+  </g>
+  
+  <!-- Learning modules -->
+  <g font-family="Inter, sans-serif" font-size="12" fill="rgba(255,255,255,0.7)">
+    <text x="80" y="390">Cloud Fundamentals</text>
+    <text x="200" y="390">IAM & Access Control</text>
+    <text x="330" y="390">Network Security</text>
+    <text x="460" y="390">Compliance</text>
+    <text x="560" y="390">DevSecOps</text>
+    <text x="650" y="390">Monitoring</text>
+  </g>
+  
+  <!-- Decorative cloud elements -->
+  <g opacity="0.3">
+    <circle cx="80" cy="60" r="3" fill="white"/>
+    <circle cx="720" cy="80" r="4" fill="white"/>
+    <circle cx="60" cy="350" r="2" fill="white"/>
+    <circle cx="740" cy="340" r="3" fill="white"/>
+    
+    <!-- Data flow lines -->
+    <path d="M 100 180 Q 200 160 300 180 Q 400 200 500 180" stroke="rgba(255,255,255,0.3)" stroke-width="1" fill="none"/>
+    <path d="M 150 320 Q 250 300 350 320 Q 450 340 550 320" stroke="rgba(255,255,255,0.3)" stroke-width="1" fill="none"/>
+  </g>
+</svg>

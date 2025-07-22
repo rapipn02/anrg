@@ -1,0 +1,337 @@
+<!-- Team Section -->
+<section class="py-16 lg:py-24 bg-white overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="text-center mb-16" data-aos="fade-up">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                Meet Our <span class="bg-gradient-to-r from-primary-600 to-cyber-600 bg-clip-text text-transparent">Expert Team</span>
+            </h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Tim profesional berpengalaman dalam cybersecurity, big data analytics, game technology, dan GIS
+            </p>
+        </div>
+
+        <!-- Auto-scrolling Team Container -->
+        <div class="relative">
+            <!-- Team Carousel -->
+            <div class="team-carousel-container" data-aos="fade-up" data-aos-delay="200">
+                <div class="team-carousel">
+                    <div class="team-slide-track" id="teamSlideTrack">
+                        <!-- Team members will be generated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <button class="carousel-btn prev-btn" onclick="scrollTeamCarousel('prev')" aria-label="Previous team member">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="carousel-btn next-btn" onclick="scrollTeamCarousel('next')" aria-label="Next team member">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <!-- View All Team CTA -->
+        <div class="text-center mt-12" data-aos="fade-up" data-aos-delay="400">
+            <a href="/team" class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-primary-600 to-cyber-600 text-white font-semibold rounded-lg hover:from-primary-700 hover:to-cyber-700 transition-all duration-300 transform hover:-translate-y-1 shadow-lg hover:shadow-xl">
+                <i class="fas fa-users mr-2"></i>
+                Lihat Seluruh Tim
+            </a>
+        </div>
+    </div>
+</section>
+
+<style>
+    .team-carousel-container {
+        position: relative;
+        overflow: hidden;
+        border-radius: 1.5rem;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        padding: 2rem 0;
+    }
+
+    .team-carousel {
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .team-slide-track {
+        display: flex;
+        animation: autoScroll 30s linear infinite;
+        transition: transform 0.5s ease-in-out;
+    }
+
+    .team-slide-track:hover {
+        animation-play-state: paused;
+    }
+
+    .team-card {
+        flex: 0 0 300px;
+        margin: 0 1rem;
+        background: white;
+        border-radius: 1.5rem;
+        padding: 2rem;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        border: 1px solid #e2e8f0;
+    }
+
+    .team-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .team-image {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin: 0 auto 1.5rem;
+        border: 4px solid #e2e8f0;
+        transition: all 0.3s ease;
+    }
+
+    .team-card:hover .team-image {
+        border-color: #3b82f6;
+        transform: scale(1.1);
+    }
+
+    .team-name {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #1f2937;
+        margin-bottom: 0.5rem;
+    }
+
+    .team-position {
+        color: #5f2eea;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .team-specialty {
+        color: #6b7280;
+        font-size: 0.875rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.4;
+    }
+
+    .team-social {
+        display: flex;
+        justify-content: center;
+        gap: 0.75rem;
+    }
+
+    .social-link {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-size: 0.875rem;
+    }
+
+    .social-link.linkedin { background: #0077b5; }
+    .social-link.github { background: #333; }
+    .social-link.email { background: #ea4335; }
+
+    .social-link:hover {
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    .carousel-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px solid #e2e8f0;
+        color: #374151;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 10;
+        backdrop-filter: blur(10px);
+    }
+
+    .carousel-btn:hover {
+        background: white;
+        border-color: #3b82f6;
+        color: #3b82f6;
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    .prev-btn {
+        left: 1rem;
+    }
+
+    .next-btn {
+        right: 1rem;
+    }
+
+    @keyframes autoScroll {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .team-card {
+            flex: 0 0 250px;
+            margin: 0 0.5rem;
+            padding: 1.5rem;
+        }
+
+        .team-image {
+            width: 100px;
+            height: 100px;
+        }
+
+        .carousel-btn {
+            width: 40px;
+            height: 40px;
+            font-size: 1rem;
+        }
+    }
+
+    /* Scroll behavior on user interaction */
+    .user-scrolling {
+        animation: none !important;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const teamMembers = [
+            {
+                name: "Dr. Ahmad Pratama",
+                position: "Lead Cybersecurity Expert",
+                specialty: "Penetration Testing & Security Architecture",
+                image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
+                linkedin: "#",
+                github: "#",
+                email: "ahmad@mbclaboratory.com"
+            },
+            {
+                name: "Sarah Wijaya, M.Sc",
+                position: "Big Data Analytics Lead",
+                specialty: "Machine Learning & Data Science",
+                image: "https://images.unsplash.com/photo-1494790108755-2616b612b566?w=400&h=400&fit=crop&crop=face",
+                linkedin: "#",
+                github: "#",
+                email: "sarah@mbclaboratory.com"
+            },
+            {
+                name: "Budi Santoso",
+                position: "Game Technology Director",
+                specialty: "Unity3D & VR/AR Development",
+                image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
+                linkedin: "#",
+                github: "#",
+                email: "budi@mbclaboratory.com"
+            },
+            {
+                name: "Indira Sari, Ph.D",
+                position: "GIS Specialist",
+                specialty: "Spatial Analysis & Remote Sensing",
+                image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face",
+                linkedin: "#",
+                github: "#",
+                email: "indira@mbclaboratory.com"
+            },
+            {
+                name: "Rizky Maulana",
+                position: "Frontend Developer",
+                specialty: "React/Next.js & UI/UX Design",
+                image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=face",
+                linkedin: "#",
+                github: "#",
+                email: "rizky@mbclaboratory.com"
+            },
+            {
+                name: "Dewi Kusuma",
+                position: "Backend Developer",
+                specialty: "Node.js & Cloud Architecture",
+                image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&h=400&fit=crop&crop=face",
+                linkedin: "#",
+                github: "#",
+                email: "dewi@mbclaboratory.com"
+            }
+        ];
+
+        const slideTrack = document.getElementById('teamSlideTrack');
+        let currentIndex = 0;
+        let isUserScrolling = false;
+
+        // Generate team cards (duplicate for seamless loop)
+        function generateTeamCards() {
+            const duplicatedMembers = [...teamMembers, ...teamMembers];
+            
+            duplicatedMembers.forEach(member => {
+                const card = document.createElement('div');
+                card.className = 'team-card';
+                card.innerHTML = `
+                    <img src="${member.image}" alt="${member.name}" class="team-image">
+                    <h3 class="team-name">${member.name}</h3>
+                    <p class="team-position">${member.position}</p>
+                    <p class="team-specialty">${member.specialty}</p>
+                    <div class="team-social">
+                        <a href="${member.linkedin}" class="social-link linkedin">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="${member.github}" class="social-link github">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="mailto:${member.email}" class="social-link email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                `;
+                slideTrack.appendChild(card);
+            });
+        }
+
+        // Scroll functionality
+        window.scrollTeamCarousel = function(direction) {
+            isUserScrolling = true;
+            slideTrack.classList.add('user-scrolling');
+            
+            if (direction === 'next') {
+                currentIndex = (currentIndex + 1) % teamMembers.length;
+            } else {
+                currentIndex = currentIndex === 0 ? teamMembers.length - 1 : currentIndex - 1;
+            }
+            
+            const translateX = -currentIndex * 332; // 300px card width + 32px margin
+            slideTrack.style.transform = `translateX(${translateX}px)`;
+            
+            // Resume auto-scroll after 5 seconds
+            setTimeout(() => {
+                isUserScrolling = false;
+                slideTrack.classList.remove('user-scrolling');
+                slideTrack.style.transform = '';
+            }, 5000);
+        };
+
+        // Accelerate scroll on mouse wheel
+        slideTrack.addEventListener('wheel', function(e) {
+            if (e.deltaY > 0) {
+                scrollTeamCarousel('next');
+            } else {
+                scrollTeamCarousel('prev');
+            }
+            e.preventDefault();
+        });
+
+        // Initialize
+        generateTeamCards();
+    });
+</script>

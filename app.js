@@ -4,6 +4,8 @@ const nodemailer = require('nodemailer');
 const contactDB = require('./contact-db'); // Import database functions
 const emailTemplates = require('./email-templates'); // Import email templates
 const formValidation = require('./form-validation'); // Import form validation
+const newsData = require('./news-data'); // Import news data
+const eventData = require('./event-data'); // Import event data
 require('dotenv').config(); // Load environment variables
 
 const app = express();
@@ -36,9 +38,13 @@ app.use(express.json());
 
 // Routes
 app.get('/', (req, res) => {
+    const featuredNews = newsData.getFeaturedNews(3); // Get 3 latest news for homepage
+    const upcomingEvents = eventData.getUpcomingEvents(3); // Get 3 upcoming events for homepage
     res.render('index', { 
         title: 'MBC Laboratory - Cybersecurity Solutions',
-        currentPage: 'home'
+        currentPage: 'home',
+        featuredNews: featuredNews,
+        upcomingEvents: upcomingEvents
     });
 });
 
@@ -56,10 +62,162 @@ app.get('/contact', (req, res) => {
     });
 });
 
+app.get('/team', (req, res) => {
+    res.render('team', { 
+        title: 'Our Team - MBC Laboratory',
+        currentPage: 'team'
+    });
+});
+
 app.get('/developer', (req, res) => {
     res.render('developer', { 
         title: 'Developer Info - MBC Laboratory',
         currentPage: 'developer'
+    });
+});
+
+// News routes
+app.get('/news', (req, res) => {
+    const { category, search, page = 1 } = req.query;
+    let allNews = newsData.getAllNews();
+    
+    // Filter by category if specified
+    if (category && category !== 'all') {
+        allNews = newsData.getNewsByCategory(category);
+    }
+    
+    // Search functionality
+    if (search) {
+        allNews = newsData.searchNews(search);
+    }
+    
+    // Pagination
+    const newsPerPage = 6;
+    const totalNews = allNews.length;
+    const totalPages = Math.ceil(totalNews / newsPerPage);
+    const currentPage = Math.max(1, Math.min(page, totalPages));
+    const startIndex = (currentPage - 1) * newsPerPage;
+    const endIndex = startIndex + newsPerPage;
+    const paginatedNews = allNews.slice(startIndex, endIndex);
+    
+    res.render('news', {
+        title: 'Latest News - MBC Laboratory',
+        currentPage: 'news',
+        news: paginatedNews,
+        categories: newsData.getNewsCategories(),
+        selectedCategory: category || 'all',
+        searchQuery: search || '',
+        pagination: {
+            current: currentPage,
+            total: totalPages,
+            hasNext: currentPage < totalPages,
+            hasPrev: currentPage > 1,
+            nextPage: currentPage + 1,
+            prevPage: currentPage - 1
+        },
+        totalNews: totalNews
+    });
+});
+
+app.get('/news/:slug', (req, res) => {
+    const news = newsData.getNewsBySlug(req.params.slug);
+    
+    if (!news) {
+        return res.status(404).render('404', {
+            title: 'News Not Found - MBC Laboratory',
+            currentPage: 'news'
+        });
+    }
+    
+    const relatedNews = newsData.getRelatedNews(news.id, 3);
+    
+    res.render('news-detail', {
+        title: `${news.title} - MBC Laboratory`,
+        currentPage: 'news',
+        news: news,
+        relatedNews: relatedNews,
+        currentUrl: req.protocol + '://' + req.get('host') + req.originalUrl
+    });
+});
+
+// Event routes
+app.get('/events', (req, res) => {
+    const { category, type, status, search, page = 1 } = req.query;
+    let allEvents = eventData.getAllEvents();
+    
+    // Filter by category if specified
+    if (category && category !== 'all') {
+        allEvents = eventData.getEventsByCategory(category);
+    }
+    
+    // Filter by type if specified
+    if (type && type !== 'all') {
+        allEvents = eventData.getEventsByType(type);
+    }
+    
+    // Filter by status if specified
+    if (status && status !== 'all') {
+        allEvents = eventData.getEventsByStatus(status);
+    }
+    
+    // Search functionality
+    if (search) {
+        allEvents = eventData.searchEvents(search);
+    }
+    
+    // Pagination
+    const eventsPerPage = 6;
+    const totalEvents = allEvents.length;
+    const totalPages = Math.ceil(totalEvents / eventsPerPage);
+    const currentPage = Math.max(1, Math.min(page, totalPages));
+    const startIndex = (currentPage - 1) * eventsPerPage;
+    const endIndex = startIndex + eventsPerPage;
+    const paginatedEvents = allEvents.slice(startIndex, endIndex);
+    
+    res.render('events', {
+        title: 'Upcoming Events - MBC Laboratory',
+        currentPage: 'events',
+        events: paginatedEvents,
+        categories: eventData.getEventCategories(),
+        types: eventData.getEventTypes(),
+        selectedCategory: category || 'all',
+        selectedType: type || 'all',
+        selectedStatus: status || 'all',
+        searchQuery: search || '',
+        pagination: {
+            current: currentPage,
+            total: totalPages,
+            hasNext: currentPage < totalPages,
+            hasPrev: currentPage > 1,
+            nextPage: currentPage + 1,
+            prevPage: currentPage - 1
+        },
+        totalEvents: totalEvents
+    });
+});
+
+app.get('/events/:slug', (req, res) => {
+    const event = eventData.getEventBySlug(req.params.slug);
+    
+    if (!event) {
+        return res.status(404).render('404', {
+            title: 'Event Not Found - MBC Laboratory',
+            currentPage: 'events'
+        });
+    }
+    
+    const relatedEvents = eventData.getRelatedEvents(event.id, 3);
+    const availableSpots = eventData.getAvailableSpots(event.id);
+    const isAvailable = eventData.isEventAvailable(event.id);
+    
+    res.render('event-detail', {
+        title: `${event.title} - MBC Laboratory`,
+        currentPage: 'events',
+        event: event,
+        relatedEvents: relatedEvents,
+        availableSpots: availableSpots,
+        isAvailable: isAvailable,
+        currentUrl: req.protocol + '://' + req.get('host') + req.originalUrl
     });
 });
 

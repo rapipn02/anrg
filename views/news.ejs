@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body class="bg-white news-page">
+    <%- include('partials/navbar') %>
+
+    <!-- Hero Section -->
+    <section class="relative pt-20 pb-16 bg-gradient-to-br from-primary via-cyber to-mint overflow-hidden">
+        <div class="absolute inset-0 bg-black/40"></div>
+        
+        <!-- Background decoration -->
+        <div class="absolute inset-0">
+            <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-1/4 right-1/3 w-80 h-80 bg-mint/20 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div class="container-custom relative z-10 pt-16">
+            <div class="text-center max-w-4xl mx-auto">
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6" data-aos="fade-up">
+                    Latest <span class="text-mint">News</span> & 
+                    <span class="text-cyber">Insights</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-white/90 mb-8 leading-relaxed" data-aos="fade-up" data-aos-delay="200">
+                    Stay updated with the latest trends, technologies, and best practices in cybersecurity and technology
+                </p>
+                
+                <!-- Search and Filter -->
+                <div class="max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="400">
+                    <form method="GET" action="/news" class="flex flex-col sm:flex-row gap-4">
+                        <div class="flex-1">
+                            <div class="relative">
+                                <input type="text" name="search" placeholder="Search news..." 
+                                       value="<%= searchQuery %>"
+                                       class="w-full px-4 py-3 pl-12 rounded-lg border border-white/20 bg-white/10 backdrop-blur-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-mint">
+                                <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-white/70"></i>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <select name="category" class="px-4 py-3 rounded-lg border border-white/20 bg-white/10 backdrop-blur-md text-white focus:outline-none focus:ring-2 focus:ring-mint">
+                                <option value="all" <%= selectedCategory === 'all' ? 'selected' : '' %>>All Categories</option>
+                                <% categories.forEach(function(category) { %>
+                                <option value="<%= category %>" <%= selectedCategory === category ? 'selected' : '' %>><%= category %></option>
+                                <% }); %>
+                            </select>
+                            <button type="submit" class="btn btn-cyber px-6 py-3">
+                                <i class="fas fa-filter mr-2"></i>Filter
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- News Grid -->
+    <section class="section-padding bg-gradient-to-br from-white to-gray-50">
+        <div class="container-custom">
+            <!-- Results Info -->
+            <div class="flex flex-col sm:flex-row justify-between items-center mb-8">
+                <div class="text-black/70 mb-4 sm:mb-0">
+                    <% if (searchQuery) { %>
+                        Showing <span class="font-bold text-primary"><%= totalNews %></span> results for "<span class="font-bold"><%= searchQuery %></span>"
+                    <% } else { %>
+                        Showing <span class="font-bold text-primary"><%= totalNews %></span> articles
+                        <% if (selectedCategory !== 'all') { %>
+                            in <span class="font-bold"><%= selectedCategory %></span>
+                        <% } %>
+                    <% } %>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <span class="text-black/70 text-sm">Sort by:</span>
+                    <select class="px-3 py-2 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+                        <option>Latest</option>
+                        <option>Most Popular</option>
+                        <option>Alphabetical</option>
+                    </select>
+                </div>
+            </div>
+
+            <% if (news.length > 0) { %>
+            <!-- News Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                <% news.forEach(function(article, index) { %>
+                <article class="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-100" data-aos="fade-up" data-aos-delay="<%= index * 100 %>">
+                    <div class="relative overflow-hidden h-48">
+                        <img src="<%= article.imageUrl %>" alt="<%= article.title %>" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+                        <div class="absolute top-4 left-4">
+                            <span class="bg-primary text-white px-3 py-1 rounded-full text-sm font-medium">
+                                <%= article.category %>
+                            </span>
+                        </div>
+                        <div class="absolute top-4 right-4">
+                            <span class="bg-black/50 text-white px-2 py-1 rounded text-xs">
+                                <i class="far fa-clock mr-1"></i><%= article.readTime %>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <div class="flex items-center text-sm text-black/60 mb-3">
+                            <span><%= new Date(article.publishDate).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' }) %></span>
+                            <span class="mx-2">•</span>
+                            <span><%= article.author %></span>
+                        </div>
+                        
+                        <h3 class="text-xl font-bold text-black mb-3 line-clamp-2 hover:text-primary transition-colors">
+                            <a href="/news/<%= article.slug %>"><%= article.title %></a>
+                        </h3>
+                        
+                        <p class="text-black/70 mb-4 line-clamp-3">
+                            <%= article.excerpt %>
+                        </p>
+                        
+                        <div class="flex items-center justify-between">
+                            <div class="flex flex-wrap gap-2">
+                                <% article.tags.slice(0, 2).forEach(function(tag) { %>
+                                <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-md text-xs">
+                                    #<%= tag %>
+                                </span>
+                                <% }); %>
+                            </div>
+                            
+                            <a href="/news/<%= article.slug %>" class="text-primary hover:text-primary-600 font-medium text-sm flex items-center transition-colors">
+                                Read More
+                                <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+                <% }); %>
+            </div>
+
+            <!-- Pagination -->
+            <% if (pagination.total > 1) { %>
+            <div class="flex justify-center items-center space-x-2">
+                <% if (pagination.hasPrev) { %>
+                <a href="?page=<%= pagination.prevPage %><%= selectedCategory !== 'all' ? '&category=' + selectedCategory : '' %><%= searchQuery ? '&search=' + searchQuery : '' %>" 
+                   class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-black hover:bg-gray-50 transition-colors">
+                    <i class="fas fa-chevron-left mr-2"></i>Previous
+                </a>
+                <% } %>
+                
+                <% for (let i = 1; i <= pagination.total; i++) { %>
+                    <% if (i === pagination.current) { %>
+                    <span class="px-4 py-2 rounded-lg bg-primary text-white font-bold">
+                        <%= i %>
+                    </span>
+                    <% } else if (i === 1 || i === pagination.total || (i >= pagination.current - 2 && i <= pagination.current + 2)) { %>
+                    <a href="?page=<%= i %><%= selectedCategory !== 'all' ? '&category=' + selectedCategory : '' %><%= searchQuery ? '&search=' + searchQuery : '' %>" 
+                       class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-black hover:bg-gray-50 transition-colors">
+                        <%= i %>
+                    </a>
+                    <% } else if (i === pagination.current - 3 || i === pagination.current + 3) { %>
+                    <span class="px-2 py-2 text-black/50">...</span>
+                    <% } %>
+                <% } %>
+                
+                <% if (pagination.hasNext) { %>
+                <a href="?page=<%= pagination.nextPage %><%= selectedCategory !== 'all' ? '&category=' + selectedCategory : '' %><%= searchQuery ? '&search=' + searchQuery : '' %>" 
+                   class="px-4 py-2 rounded-lg bg-white border border-gray-200 text-black hover:bg-gray-50 transition-colors">
+                    Next<i class="fas fa-chevron-right ml-2"></i>
+                </a>
+                <% } %>
+            </div>
+            <% } %>
+            
+            <% } else { %>
+            <!-- No Results -->
+            <div class="text-center py-16">
+                <div class="max-w-md mx-auto">
+                    <i class="fas fa-search text-6xl text-gray-300 mb-6"></i>
+                    <h3 class="text-2xl font-bold text-black mb-4">No articles found</h3>
+                    <p class="text-black/70 mb-6">
+                        <% if (searchQuery) { %>
+                            No articles found for "<%= searchQuery %>". Try adjusting your search terms.
+                        <% } else { %>
+                            No articles found in this category. Try browsing other categories.
+                        <% } %>
+                    </p>
+                    <a href="/news" class="btn btn-primary">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        View All News
+                    </a>
+                </div>
+            </div>
+            <% } %>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="section-padding gradient-bg relative overflow-hidden">
+        <div class="absolute inset-0">
+            <div class="absolute top-1/2 left-1/4 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-1/4 right-1/3 w-80 h-80 bg-mint/20 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div class="container-custom relative z-10">
+            <div class="text-center max-w-2xl mx-auto">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
+                    Stay <span class="text-mint">Updated</span>
+                </h2>
+                <p class="text-xl text-white/90 mb-8">
+                    Subscribe to our newsletter and get the latest cybersecurity insights delivered to your inbox
+                </p>
+                
+                <form class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                    <input type="email" placeholder="Enter your email" 
+                           class="flex-1 px-4 py-3 rounded-lg border border-white/20 bg-white/10 backdrop-blur-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-mint">
+                    <button type="submit" class="btn bg-mint text-black hover:bg-mint-600 px-6 py-3 font-bold">
+                        Subscribe
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <%- include('partials/footer') %>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Auto-submit form on category change
+        const categorySelect = document.querySelector('select[name="category"]');
+        if (categorySelect) {
+            categorySelect.addEventListener('change', function() {
+                this.form.submit();
+            });
+        }
+    </script>
+    
+    <!-- AOS Animation JavaScript -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true,
+            offset: 100
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <meta name="description" content="<%= event.description.substring(0, 160) %>">
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body class="bg-white events-page">
+    <%- include('partials/navbar') %>
+
+    <!-- Breadcrumb -->
+    <section class="pt-24 pb-4 bg-gradient-to-br from-white to-gray-50">
+        <div class="container-custom">
+            <nav class="flex" aria-label="Breadcrumb">
+                <ol class="flex items-center space-x-2 text-sm">
+                    <li>
+                        <a href="/" class="text-black/60 hover:text-primary transition-colors">Home</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-chevron-right text-black/40 text-xs"></i>
+                    </li>
+                    <li>
+                        <a href="/events" class="text-black/60 hover:text-primary transition-colors">Events</a>
+                    </li>
+                    <li>
+                        <i class="fas fa-chevron-right text-black/40 text-xs"></i>
+                    </li>
+                    <li>
+                        <span class="text-primary font-medium"><%= event.title %></span>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Event Detail -->
+    <section class="section-padding bg-gradient-to-br from-white to-gray-50">
+        <div class="container-custom">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                <!-- Event Content -->
+                <div class="lg:col-span-2">
+                    <article class="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-100" data-aos="fade-right">
+                        <div class="relative">
+                            <img 
+                                src="<%= event.image %>" 
+                                alt="<%= event.title %>"
+                                class="w-full h-64 md:h-80 object-cover"
+                            >
+                            <div class="absolute top-4 left-4 flex gap-2">
+                                <span class="bg-<%= event.category === 'workshop' ? 'blue' : event.category === 'seminar' ? 'green' : event.category === 'conference' ? 'purple' : 'yellow' %>-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                                    <%= event.category.charAt(0).toUpperCase() + event.category.slice(1) %>
+                                </span>
+                                <span class="bg-<%= event.status === 'open' ? 'green' : 'gray' %>-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                                    <%= event.status === 'open' ? 'Open' : 'Closed' %>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="p-8">
+                            <!-- Event Title and Meta -->
+                            <div class="mb-6" data-aos="fade-up" data-aos-delay="200">
+                                <h1 class="text-3xl md:text-4xl font-bold text-black mb-4">
+                                    <%= event.title %>
+                                </h1>
+                                <div class="flex flex-wrap gap-6 text-black/70">
+                                    <div class="flex items-center gap-2">
+                                        <i class="far fa-calendar-alt text-primary"></i>
+                                        <span>
+                                            <%= new Date(event.date).toLocaleDateString('id-ID', { 
+                                                weekday: 'long',
+                                                day: 'numeric', 
+                                                month: 'long', 
+                                                year: 'numeric' 
+                                            }) %>
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <i class="far fa-clock text-primary"></i>
+                                        <span><%= event.time %></span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <i class="fas fa-map-marker-alt text-primary"></i>
+                                        <span>
+                                            <% if (event.type === 'online') { %>
+                                                Online Event
+                                            <% } else if (event.type === 'offline') { %>
+                                                <%= event.location %>
+                                            <% } else { %>
+                                                Hybrid (Online & <%= event.location %>)
+                                            <% } %>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Event Description -->
+                            <div class="prose prose-lg max-w-none mb-8">
+                                <p class="text-lg text-black/80 leading-relaxed">
+                                    <%= event.description %>
+                                </p>
+                            </div>
+
+                            <!-- Event Content -->
+                            <div class="prose prose-lg max-w-none">
+                                <%- event.content %>
+                            </div>
+
+                            <!-- Event Speakers -->
+                            <% if (event.speakers && event.speakers.length > 0) { %>
+                                <div class="mt-12 pt-8 border-t border-gray-200">
+                                    <h3 class="text-2xl font-bold text-black mb-6">Speakers</h3>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <% event.speakers.forEach(speaker => { %>
+                                            <div class="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
+                                                <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center">
+                                                    <i class="fas fa-user text-primary text-xl"></i>
+                                                </div>
+                                                <div>
+                                                    <h4 class="text-black font-bold mb-1"><%= speaker.name %></h4>
+                                                    <p class="text-primary text-sm mb-2"><%= speaker.title %></p>
+                                                    <p class="text-black/70 text-sm"><%= speaker.bio %></p>
+                                                </div>
+                                            </div>
+                                        <% }) %>
+                                    </div>
+                                </div>
+                            <% } %>
+
+                            <!-- Social Share -->
+                            <div class="mt-12 pt-8 border-t border-gray-200">
+                                <h4 class="text-black font-bold mb-4">Share This Event</h4>
+                                <div class="flex gap-3">
+                                    <a href="https://twitter.com/intent/tweet?url=<%= encodeURIComponent(currentUrl) %>&text=<%= encodeURIComponent('Check out this event: ' + event.title) %>" 
+                                       target="_blank"
+                                       class="flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg text-white transition-colors">
+                                        <i class="fab fa-twitter"></i>
+                                        Twitter
+                                    </a>
+                                    <a href="https://www.facebook.com/sharer/sharer.php?u=<%= encodeURIComponent(currentUrl) %>" 
+                                       target="_blank"
+                                       class="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white transition-colors">
+                                        <i class="fab fa-facebook"></i>
+                                        Facebook
+                                    </a>
+                                    <a href="https://www.linkedin.com/sharing/share-offsite/?url=<%= encodeURIComponent(currentUrl) %>" 
+                                       target="_blank"
+                                       class="flex items-center gap-2 px-4 py-2 bg-blue-700 hover:bg-blue-800 rounded-lg text-white transition-colors">
+                                        <i class="fab fa-linkedin"></i>
+                                        LinkedIn
+                                    </a>
+                                    <button onclick="copyToClipboard()" 
+                                            class="flex items-center gap-2 px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg text-white transition-colors">
+                                        <i class="fas fa-copy"></i>
+                                        Copy Link
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- Registration Sidebar -->
+                <div class="lg:col-span-1">
+                    <div class="sticky top-24 space-y-6" data-aos="fade-left">
+                        <!-- Registration Card -->
+                        <div class="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 p-6 border border-gray-100">
+                            <div class="text-center mb-6">
+                                <div class="text-3xl font-bold text-primary mb-2">
+                                    <% if (typeof event.price === 'string') { %>
+                                        <%= event.price %>
+                                    <% } else if (event.price === 0) { %>
+                                        Free
+                                    <% } else { %>
+                                        Rp <%= event.price.toLocaleString('id-ID') %>
+                                    <% } %>
+                                </div>
+                                <p class="text-black/70">
+                                    <% if (event.spotsLeft > 0) { %>
+                                        <%= event.spotsLeft %> spots remaining
+                                    <% } else { %>
+                                        Event full
+                                    <% } %>
+                                </p>
+                            </div>
+
+                            <% if (event.status === 'open' && event.spotsLeft > 0) { %>
+                                <button class="btn btn-primary w-full mb-4" onclick="registerEvent()">
+                                    Register Now
+                                </button>
+                            <% } else if (event.status === 'closed') { %>
+                                <button class="btn bg-gray-400 text-white w-full mb-4 cursor-not-allowed" disabled>
+                                    Registration Closed
+                                </button>
+                            <% } else { %>
+                                <button class="btn bg-gray-400 text-white w-full mb-4 cursor-not-allowed" disabled>
+                                    Event Full
+                                </button>
+                            <% } %>
+
+                            <!-- Event Details -->
+                            <div class="space-y-4 text-sm">
+                                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                    <span class="text-black/70">Category</span>
+                                    <span class="text-black font-medium"><%= event.category.charAt(0).toUpperCase() + event.category.slice(1) %></span>
+                                </div>
+                                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                    <span class="text-black/70">Type</span>
+                                    <span class="text-black font-medium">
+                                        <%= event.type === 'online' ? 'Online' : event.type === 'offline' ? 'Offline' : 'Hybrid' %>
+                                    </span>
+                                </div>
+                                <% if (event.duration) { %>
+                                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                    <span class="text-black/70">Duration</span>
+                                    <span class="text-black font-medium"><%= event.duration %></span>
+                                </div>
+                                <% } %>
+                                <% if (event.level) { %>
+                                <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                                    <span class="text-black/70">Level</span>
+                                    <span class="text-black font-medium"><%= event.level %></span>
+                                </div>
+                                <% } %>
+                                <% if (event.capacity) { %>
+                                <div class="flex justify-between items-center py-2">
+                                    <span class="text-black/70">Capacity</span>
+                                    <span class="text-black font-medium"><%= event.capacity %> participants</span>
+                                </div>
+                                <% } %>
+                            </div>
+                        </div>
+
+                        <!-- Contact Info -->
+                        <div class="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 p-6 border border-gray-100">
+                            <h4 class="text-black font-bold mb-4">Need Help?</h4>
+                            <div class="space-y-3 text-sm">
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-envelope text-primary"></i>
+                                    <a href="mailto:events@mbclaboratory.com" class="text-black/70 hover:text-primary transition-colors">
+                                        events@mbclaboratory.com
+                                    </a>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-phone text-primary"></i>
+                                    <a href="tel:+628123456789" class="text-black/70 hover:text-primary transition-colors">
+                                        +62 812 3456 7890
+                                    </a>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <i class="fab fa-whatsapp text-primary"></i>
+                                    <a href="https://wa.me/628123456789" class="text-black/70 hover:text-primary transition-colors">
+                                        WhatsApp
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Events -->
+    <% if (relatedEvents && relatedEvents.length > 0) { %>
+        <section class="section-padding bg-white border-t border-gray-200">
+            <div class="container-custom">
+                <div class="flex justify-between items-center mb-12">
+                    <h2 class="text-3xl font-bold text-black">Related Events</h2>
+                    <a href="/events" class="text-primary hover:text-primary-600 transition-colors">
+                        View All Events →
+                    </a>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <% relatedEvents.forEach(relatedEvent => { %>
+                        <article class="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-100">
+                            <div class="relative overflow-hidden h-48">
+                                <img 
+                                    src="<%= relatedEvent.image %>" 
+                                    alt="<%= relatedEvent.title %>"
+                                    class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                                >
+                                <div class="absolute top-4 left-4">
+                                    <span class="bg-<%= relatedEvent.category === 'workshop' ? 'blue' : relatedEvent.category === 'seminar' ? 'green' : relatedEvent.category === 'conference' ? 'purple' : 'yellow' %>-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                                        <%= relatedEvent.category.charAt(0).toUpperCase() + relatedEvent.category.slice(1) %>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex items-center gap-4 text-sm text-black/60 mb-3">
+                                    <span class="flex items-center gap-1">
+                                        <i class="far fa-calendar-alt"></i>
+                                        <%= new Date(relatedEvent.date).toLocaleDateString('id-ID', { 
+                                            day: 'numeric', 
+                                            month: 'short' 
+                                        }) %>
+                                    </span>
+                                    <span class="flex items-center gap-1">
+                                        <i class="far fa-clock"></i>
+                                        <%= relatedEvent.time %>
+                                    </span>
+                                </div>
+                                <h3 class="text-xl font-bold text-black mb-2 line-clamp-2 hover:text-primary transition-colors">
+                                    <a href="/events/<%= relatedEvent.slug %>"><%= relatedEvent.title %></a>
+                                </h3>
+                                <p class="text-black/70 mb-4 line-clamp-2">
+                                    <%= relatedEvent.description %>
+                                </p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-primary font-bold">
+                                        <% if (typeof relatedEvent.price === 'string') { %>
+                                            <%= relatedEvent.price %>
+                                        <% } else if (relatedEvent.price === 0) { %>
+                                            Free
+                                        <% } else { %>
+                                            Rp <%= relatedEvent.price.toLocaleString('id-ID') %>
+                                        <% } %>
+                                    </span>
+                                    <a href="/events/<%= relatedEvent.slug %>" class="text-primary hover:text-primary-600 font-medium text-sm flex items-center transition-colors">
+                                        Details
+                                        <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
+                    <% }) %>
+                </div>
+            </div>
+        </section>
+    <% } %>
+
+    <!-- Footer -->
+    <%- include('partials/footer') %>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Registration function
+        function registerEvent() {
+            alert('Registration functionality will be implemented with backend. For now, please contact us through the available contact methods.');
+        }
+
+        // Copy link function
+        function copyToClipboard() {
+            navigator.clipboard.writeText(window.location.href).then(function() {
+                alert('Link copied successfully!');
+            }, function(err) {
+                console.error('Could not copy text: ', err);
+                alert('Failed to copy link. Please copy manually from the address bar.');
+            });
+        }
+    </script>
+    
+    <!-- AOS Animation JavaScript -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true,
+            offset: 100
+        });
+    </script>
+</body>
+</html>

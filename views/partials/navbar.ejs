@@ -1,0 +1,116 @@
+<!-- Navigation -->
+<nav class="fixed w-full z-50 bg-gray-900/95 backdrop-blur-md shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <!-- Logo -->
+            <div class="flex items-center">
+                <a href="/" class="flex items-center group">
+                    <i class="fas fa-shield-alt text-2xl text-cyan-400 mr-3 group-hover:text-cyan-300 transition-colors"></i>
+                    <span class="text-xl font-bold text-white group-hover:text-cyan-300 transition-colors">MBC Laboratory</span>
+                </a>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <div class="hidden md:block">
+                <div class="ml-10 flex items-baseline space-x-8">
+                    <a href="/" class="text-gray-300 hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center">
+                        <i class="fas fa-home mr-2"></i>Home
+                    </a>
+                    <a href="/services" class="text-gray-300 hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center">
+                        <i class="fas fa-cog mr-2"></i>Services
+                    </a>
+                    <a href="/news" class="text-gray-300 hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center">
+                        <i class="fas fa-newspaper mr-2"></i>News
+                    </a>
+                    <a href="/events" class="text-gray-300 hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center">
+                        <i class="fas fa-calendar-alt mr-2"></i>Events
+                    </a>
+                    <a href="/team" class="text-gray-300 hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center">
+                        <i class="fas fa-users mr-2"></i>Team
+                    </a>
+                    <a href="/contact" class="text-gray-300 hover:text-cyan-400 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center">
+                        <i class="fas fa-envelope mr-2"></i>Contact
+                    </a>
+                </div>
+            </div>
+
+            <!-- CTA Button -->
+            <div class="hidden md:block">
+                <a href="/contact" class="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-6 py-2 rounded-lg font-medium hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 transform hover:-translate-y-1 shadow-lg hover:shadow-xl">
+                    <i class="fas fa-rocket mr-2"></i>Jelajahi Project
+                </a>
+            </div>
+
+            <!-- Mobile menu button -->
+            <div class="md:hidden">
+                <button type="button" class="text-gray-300 hover:text-white focus:outline-none focus:text-white" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars text-xl" id="menu-icon"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div class="md:hidden hidden" id="mobile-menu">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-gray-800/95 backdrop-blur-md">
+            <a href="/" class="text-gray-300 hover:text-cyan-400 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200">
+                <i class="fas fa-home mr-2"></i>Home
+            </a>
+            <a href="/services" class="text-gray-300 hover:text-cyan-400 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200">
+                <i class="fas fa-cog mr-2"></i>Services
+            </a>
+            <a href="/news" class="text-gray-300 hover:text-cyan-400 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200">
+                <i class="fas fa-newspaper mr-2"></i>News
+            </a>
+            <a href="/events" class="text-gray-300 hover:text-cyan-400 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200">
+                <i class="fas fa-calendar-alt mr-2"></i>Events
+            </a>
+            <a href="/team" class="text-gray-300 hover:text-cyan-400 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200">
+                <i class="fas fa-users mr-2"></i>Team
+            </a>
+            <a href="/contact" class="text-gray-300 hover:text-cyan-400 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200">
+                <i class="fas fa-envelope mr-2"></i>Contact
+            </a>
+            <a href="/contact" class="text-blue-300 hover:text-cyan-400 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200">
+    <i class="fas fa-rocket mr-2"></i>Jelajahi Project
+</a>
+        </div>
+    </div>
+</nav>
+
+<script>
+    function toggleMobileMenu() {
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+        
+        if (mobileMenu.classList.contains('hidden')) {
+            mobileMenu.classList.remove('hidden');
+            menuIcon.classList.remove('fa-bars');
+            menuIcon.classList.add('fa-times');
+        } else {
+            mobileMenu.classList.add('hidden');
+            menuIcon.classList.remove('fa-times');
+            menuIcon.classList.add('fa-bars');
+        }
+    }
+
+    // Close mobile menu when clicking on a link
+    document.querySelectorAll('#mobile-menu a').forEach(link => {
+        link.addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.add('hidden');
+            document.getElementById('menu-icon').classList.remove('fa-times');
+            document.getElementById('menu-icon').classList.add('fa-bars');
+        });
+    });
+
+    // Highlight active page
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll('nav a[href]');
+    
+    navLinks.forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+            link.classList.add('text-cyan-400');
+            link.classList.remove('text-gray-300');
+        }
+    });
+</script>

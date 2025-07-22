@@ -1,0 +1,108 @@
+<svg width="800" height="400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#1e293b;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#334155;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#475569;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="url(#cloudGrad)"/>
+  
+  <!-- Cloud infrastructure -->
+  <g fill="rgba(255,255,255,0.9)">
+    <!-- Main cloud -->
+    <path d="M200 150 Q180 130 160 150 Q140 130 120 150 Q100 140 100 160 Q100 180 120 180 L280 180 Q300 180 300 160 Q300 140 280 150 Q260 130 240 150 Q220 130 200 150 Z"/>
+    
+    <!-- Smaller clouds -->
+    <path d="M450 100 Q440 90 430 100 Q420 90 410 100 Q400 95 400 105 Q400 115 410 115 L470 115 Q480 115 480 105 Q480 95 470 100 Q460 90 450 100 Z"/>
+    
+    <path d="M550 250 Q540 240 530 250 Q520 240 510 250 Q500 245 500 255 Q500 265 510 265 L570 265 Q580 265 580 255 Q580 245 570 250 Q560 240 550 250 Z"/>
+  </g>
+  
+  <!-- Cloud service icons -->
+  <g transform="translate(150, 160)">
+    <!-- AWS -->
+    <rect x="0" y="0" width="40" height="30" rx="4" fill="rgba(255,153,0,0.9)"/>
+    <text x="20" y="20" text-anchor="middle" font-family="Inter" font-size="10" font-weight="bold" fill="white">AWS</text>
+    
+    <!-- Azure -->
+    <rect x="60" y="0" width="40" height="30" rx="4" fill="rgba(0,120,212,0.9)"/>
+    <text x="80" y="15" text-anchor="middle" font-family="Inter" font-size="8" font-weight="bold" fill="white">Azure</text>
+    
+    <!-- GCP -->
+    <rect x="120" y="0" width="40" height="30" rx="4" fill="rgba(66,133,244,0.9)"/>
+    <text x="140" y="20" text-anchor="middle" font-family="Inter" font-size="10" font-weight="bold" fill="white">GCP</text>
+  </g>
+  
+  <!-- Security layers -->
+  <g stroke="rgba(255,255,255,0.6)" stroke-width="2" fill="none">
+    <!-- Identity layer -->
+    <ellipse cx="400" cy="200" rx="150" ry="80" stroke-dasharray="5,5" opacity="0.8"/>
+    <text x="400" y="130" text-anchor="middle" font-family="Inter" font-size="12" fill="rgba(255,255,255,0.8)">Identity & Access</text>
+    
+    <!-- Network layer -->
+    <ellipse cx="400" cy="200" rx="200" ry="110" stroke-dasharray="8,4" opacity="0.6"/>
+    <text x="400" y="100" text-anchor="middle" font-family="Inter" font-size="12" fill="rgba(255,255,255,0.6)">Network Security</text>
+    
+    <!-- Data layer -->
+    <ellipse cx="400" cy="200" rx="250" ry="140" stroke-dasharray="10,6" opacity="0.4"/>
+    <text x="400" y="70" text-anchor="middle" font-family="Inter" font-size="12" fill="rgba(255,255,255,0.4)">Data Protection</text>
+  </g>
+  
+  <!-- Security icons around the cloud -->
+  <g fill="rgba(255,255,255,0.8)">
+    <!-- Shield -->
+    <path d="M350 120 L350 110 Q350 100 360 100 L370 100 Q380 100 380 110 L380 120 Q380 130 365 140 Q350 130 350 120 Z"/>
+    
+    <!-- Lock -->
+    <rect x="430" y="130" width="15" height="12" rx="2" fill="rgba(255,255,255,0.8)"/>
+    <path d="M433 130 L433 125 Q433 120 437.5 120 Q442 120 442 125 L442 130" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="1"/>
+    
+    <!-- Key -->
+    <rect x="350" y="270" width="8" height="3" fill="rgba(255,255,255,0.8)"/>
+    <circle cx="347" cy="271.5" r="4" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="1"/>
+    
+    <!-- Monitor -->
+    <rect x="430" y="260" width="20" height="15" rx="2" fill="rgba(255,255,255,0.8)"/>
+    <rect x="433" y="263" width="14" height="9" fill="rgba(15,23,42,0.8)"/>
+    <rect x="438" y="275" width="4" height="3" fill="rgba(255,255,255,0.8)"/>
+  </g>
+  
+  <!-- Compliance badges -->
+  <g transform="translate(600, 100)">
+    <circle cx="20" cy="20" r="18" fill="rgba(34,197,94,0.2)" stroke="rgba(34,197,94,0.8)" stroke-width="2"/>
+    <text x="20" y="15" text-anchor="middle" font-family="Inter" font-size="8" font-weight="bold" fill="rgba(34,197,94,1)">ISO</text>
+    <text x="20" y="25" text-anchor="middle" font-family="Inter" font-size="8" font-weight="bold" fill="rgba(34,197,94,1)">27001</text>
+    
+    <circle cx="60" cy="20" r="18" fill="rgba(59,130,246,0.2)" stroke="rgba(59,130,246,0.8)" stroke-width="2"/>
+    <text x="60" y="18" text-anchor="middle" font-family="Inter" font-size="8" font-weight="bold" fill="rgba(59,130,246,1)">SOC2</text>
+    <text x="60" y="26" text-anchor="middle" font-family="Inter" font-size="8" font-weight="bold" fill="rgba(59,130,246,1)">Type II</text>
+    
+    <circle cx="100" cy="20" r="18" fill="rgba(168,85,247,0.2)" stroke="rgba(168,85,247,0.8)" stroke-width="2"/>
+    <text x="100" y="25" text-anchor="middle" font-family="Inter" font-size="10" font-weight="bold" fill="rgba(168,85,247,1)">GDPR</text>
+  </g>
+  
+  <!-- Title -->
+  <text x="400" y="340" text-anchor="middle" font-family="Inter, sans-serif" font-size="32" font-weight="bold" fill="white">
+    Cloud Security
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="400" y="370" text-anchor="middle" font-family="Inter, sans-serif" font-size="16" fill="rgba(255,255,255,0.8)">
+    Enterprise Best Practices &amp; Compliance
+  </text>
+  
+  <!-- Framework labels -->
+  <g font-family="Inter, sans-serif" font-size="10" fill="rgba(255,255,255,0.7)">
+    <text x="50" y="390">Zero Trust</text>
+    <text x="150" y="390">IAM</text>
+    <text x="250" y="390">CSPM</text>
+    <text x="350" y="390">DevSecOps</text>
+    <text x="450" y="390">SIEM</text>
+    <text x="550" y="390">Encryption</text>
+    <text x="650" y="390">Monitoring</text>
+  </g>
+</svg>
