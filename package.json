@@ -1,6 +1,6 @@
 {
-  "name": "mbc-laboratory",
-  "version": "1.0.0",
+  "name": "anrg-laboratory",
+  "version": "2.0.0",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -15,11 +15,14 @@
     "express",
     "tailwind",
     "cybersecurity",
-    "laboratory"
+    "artificial-intelligence",
+    "network-research",
+    "laboratory",
+    "anrg"
   ],
-  "author": "MBC Laboratory",
+  "author": "ANRG Laboratory",
   "license": "MIT",
-  "description": "MBC Laboratory Landing Page with Express and Tailwind CSS",
+  "description": "ANRG Laboratory Website - Advanced Network Research Group with Express and Tailwind CSS",
   "dependencies": {
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",

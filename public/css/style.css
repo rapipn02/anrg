@@ -880,10 +880,10 @@ body {
 
 .partners-scroll {
   display: flex;
-  width: 500%;
   gap: 5rem;
-  animation: scroll-infinite 80s linear infinite;
+  animation: scroll-infinite 60s linear infinite;
   align-items: center;
+  width: fit-content;
 }
 
 .partner-logo {
@@ -891,10 +891,12 @@ body {
   width: auto;
   flex-shrink: 0;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-  opacity: 0.7;
+  opacity: 0.6;
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 500ms;
+  filter: grayscale(100%);
+  min-width: 120px;
 }
 
 .partner-logo:hover {
@@ -902,25 +904,19 @@ body {
   --tw-scale-y: 1.1;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
   opacity: 1;
-}
-
-.partner-logo {
-  min-width: 160px;
-  filter: brightness(0) invert(1);
+  filter: grayscale(0%);
 }
 
 /* Partner logo di hero section */
 
 .hero-section .partner-logo {
-  opacity: 0.5;
+  opacity: 0.4;
+  filter: brightness(0) invert(1);
 }
 
 .hero-section .partner-logo:hover {
-  opacity: 0.9;
-}
-
-.hero-section .partner-logo {
-  filter: brightness(0) invert(1) opacity(0.6);
+  opacity: 0.8;
+  filter: brightness(0) invert(1);
 }
 
 .partner-logo img {
@@ -930,7 +926,7 @@ body {
      object-fit: contain;
 }
 
-/* Partner animation - lebih lambat dan smooth */
+/* Partner animation - infinite loop yang smooth dengan 3 sets */
 
 @keyframes scroll-infinite {
   0% {
@@ -938,7 +934,7 @@ body {
   }
 
   100% {
-    transform: translateX(-25%);
+    transform: translateX(-33.333%);
   }
 }
 
