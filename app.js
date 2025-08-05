@@ -4,8 +4,19 @@ const nodemailer = require('nodemailer');
 const contactDB = require('./contact-db'); // Import database functions
 const emailTemplates = require('./email-templates'); // Import email templates
 const formValidation = require('./form-validation'); // Import form validation
-const newsData = require('./news-data'); // Import news data
-const eventData = require('./event-data'); // Import event data
+
+// Import content service (menggunakan MySQL dengan fallback dummy data)
+const contentService = require('./content-service');
+
+// Import admin routes
+const adminApiRoutes = require('./routes/admin-mysql'); // Admin API routes with MySQL
+const adminFrontendRoutes = require('./routes/admin-frontend'); // Admin frontend routes
+const imagesApiRoutes = require('./routes/images'); // Images API routes
+
+// Import database and admin DB
+const { testConnection, initializeTables } = require('./database');
+const adminDB = require('./admin-db-mysql');
+
 require('dotenv').config(); // Load environment variables
 
 const app = express();
@@ -36,194 +47,287 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// Admin Routes
+app.use('/admin', adminFrontendRoutes); // Admin frontend pages
+app.use('/api/admin', adminApiRoutes); // Admin API routes
+app.use('/api/images', imagesApiRoutes); // Images API routes
+
 // Routes
-app.get('/', (req, res) => {
-    const featuredNews = newsData.getFeaturedNews(3); // Get 3 latest news for homepage
-    const upcomingEvents = eventData.getUpcomingEvents(3); // Get 3 upcoming events for homepage
-    res.render('index', { 
-        title: 'MBC Laboratory - Cybersecurity Solutions',
-        currentPage: 'home',
-        featuredNews: featuredNews,
-        upcomingEvents: upcomingEvents
-    });
+app.get('/', async (req, res) => {
+    try {
+        const featuredNews = await contentService.getFeaturedNews(3); // Get 3 latest news for homepage
+        const upcomingEvents = await contentService.getUpcomingEvents(3); // Get 3 upcoming events for homepage
+        res.render('index', { 
+            title: 'ANRG Laboratory - Advanced Network Research Group',
+            currentPage: 'home',
+            featuredNews: featuredNews,
+            upcomingEvents: upcomingEvents
+        });
+    } catch (error) {
+        console.error('Error loading homepage:', error);
+        res.render('index', { 
+            title: 'ANRG Laboratory - Advanced Network Research Group',
+            currentPage: 'home',
+            featuredNews: [],
+            upcomingEvents: []
+        });
+    }
 });
 
 app.get('/services', (req, res) => {
     res.render('services', { 
-        title: 'Our Services - MBC Laboratory',
+        title: 'Our Services - ANRG Laboratory',
         currentPage: 'services'
     });
 });
 
 app.get('/contact', (req, res) => {
     res.render('contact', { 
-        title: 'Contact Us - MBC Laboratory',
+        title: 'Contact Us - ANRG Laboratory',
         currentPage: 'contact'
     });
 });
 
-app.get('/team', (req, res) => {
-    res.render('team', { 
-        title: 'Our Team - MBC Laboratory',
-        currentPage: 'team'
-    });
+app.get('/team', async (req, res) => {
+    try {
+        const teamMembers = await contentService.getAllTeam();
+        const advisors = await contentService.getTeamByRole('advisor');
+        const researchers = await contentService.getTeamByRole('researcher');
+        const students = await contentService.getTeamByRole('student');
+        const alumni = await contentService.getTeamByRole('alumni');
+        
+        res.render('team', { 
+            title: 'Our Team - ANRG Laboratory',
+            currentPage: 'team',
+            teamMembers: teamMembers,
+            advisors: advisors,
+            researchers: researchers,
+            students: students,
+            alumni: alumni
+        });
+    } catch (error) {
+        console.error('Error loading team page:', error);
+        res.render('team', { 
+            title: 'Our Team - ANRG Laboratory',
+            currentPage: 'team',
+            teamMembers: [],
+            advisors: [],
+            researchers: [],
+            students: [],
+            alumni: []
+        });
+    }
 });
 
 app.get('/developer', (req, res) => {
     res.render('developer', { 
-        title: 'Developer Info - MBC Laboratory',
+        title: 'Developer Info - ANRG Laboratory',
         currentPage: 'developer'
     });
 });
 
 // News routes
-app.get('/news', (req, res) => {
-    const { category, search, page = 1 } = req.query;
-    let allNews = newsData.getAllNews();
-    
-    // Filter by category if specified
-    if (category && category !== 'all') {
-        allNews = newsData.getNewsByCategory(category);
+app.get('/news', async (req, res) => {
+    try {
+        const { category, search, page = 1 } = req.query;
+        let allNews = await contentService.getAllNews();
+        
+        // Filter by category if specified
+        if (category && category !== 'all') {
+            allNews = await contentService.getNewsByCategory(category);
+        }
+        
+        // Search functionality
+        if (search) {
+            allNews = await contentService.searchNews(search);
+        }
+        
+        // Pagination
+        const newsPerPage = 6;
+        const totalNews = allNews.length;
+        const totalPages = Math.ceil(totalNews / newsPerPage);
+        const currentPage = Math.max(1, Math.min(page, totalPages));
+        const startIndex = (currentPage - 1) * newsPerPage;
+        const endIndex = startIndex + newsPerPage;
+        const paginatedNews = allNews.slice(startIndex, endIndex);
+        
+        res.render('news', {
+            title: 'Latest News - ANRG Laboratory',
+            currentPage: 'news',
+            news: paginatedNews,
+            categories: contentService.getNewsCategories(),
+            selectedCategory: category || 'all',
+            searchQuery: search || '',
+            pagination: {
+                current: currentPage,
+                total: totalPages,
+                hasNext: currentPage < totalPages,
+                hasPrev: currentPage > 1,
+                nextPage: currentPage + 1,
+                prevPage: currentPage - 1
+            },
+            totalNews: totalNews
+        });
+    } catch (error) {
+        console.error('Error loading news page:', error);
+        res.render('news', {
+            title: 'Latest News - ANRG Laboratory',
+            currentPage: 'news',
+            news: [],
+            categories: contentService.getNewsCategories(),
+            selectedCategory: 'all',
+            searchQuery: '',
+            pagination: {
+                current: 1,
+                total: 1,
+                hasNext: false,
+                hasPrev: false,
+                nextPage: 1,
+                prevPage: 1
+            },
+            totalNews: 0
+        });
     }
-    
-    // Search functionality
-    if (search) {
-        allNews = newsData.searchNews(search);
-    }
-    
-    // Pagination
-    const newsPerPage = 6;
-    const totalNews = allNews.length;
-    const totalPages = Math.ceil(totalNews / newsPerPage);
-    const currentPage = Math.max(1, Math.min(page, totalPages));
-    const startIndex = (currentPage - 1) * newsPerPage;
-    const endIndex = startIndex + newsPerPage;
-    const paginatedNews = allNews.slice(startIndex, endIndex);
-    
-    res.render('news', {
-        title: 'Latest News - MBC Laboratory',
-        currentPage: 'news',
-        news: paginatedNews,
-        categories: newsData.getNewsCategories(),
-        selectedCategory: category || 'all',
-        searchQuery: search || '',
-        pagination: {
-            current: currentPage,
-            total: totalPages,
-            hasNext: currentPage < totalPages,
-            hasPrev: currentPage > 1,
-            nextPage: currentPage + 1,
-            prevPage: currentPage - 1
-        },
-        totalNews: totalNews
-    });
 });
 
-app.get('/news/:slug', (req, res) => {
-    const news = newsData.getNewsBySlug(req.params.slug);
-    
-    if (!news) {
-        return res.status(404).render('404', {
-            title: 'News Not Found - MBC Laboratory',
+app.get('/news/:slug', async (req, res) => {
+    try {
+        const news = await contentService.getNewsBySlug(req.params.slug);
+        
+        if (!news) {
+            return res.status(404).render('404', {
+                title: 'News Not Found - ANRG Laboratory',
+                currentPage: 'news'
+            });
+        }
+        
+        const relatedNews = await contentService.getRelatedNews(news.id, 3);
+        
+        res.render('news-detail', {
+            title: `${news.title} - ANRG Laboratory`,
+            currentPage: 'news',
+            news: news,
+            relatedNews: relatedNews,
+            currentUrl: req.protocol + '://' + req.get('host') + req.originalUrl
+        });
+    } catch (error) {
+        console.error('Error loading news detail:', error);
+        res.status(404).render('404', {
+            title: 'News Not Found - ANRG Laboratory',
             currentPage: 'news'
         });
     }
-    
-    const relatedNews = newsData.getRelatedNews(news.id, 3);
-    
-    res.render('news-detail', {
-        title: `${news.title} - MBC Laboratory`,
-        currentPage: 'news',
-        news: news,
-        relatedNews: relatedNews,
-        currentUrl: req.protocol + '://' + req.get('host') + req.originalUrl
-    });
 });
 
 // Event routes
-app.get('/events', (req, res) => {
-    const { category, type, status, search, page = 1 } = req.query;
-    let allEvents = eventData.getAllEvents();
-    
-    // Filter by category if specified
-    if (category && category !== 'all') {
-        allEvents = eventData.getEventsByCategory(category);
+app.get('/events', async (req, res) => {
+    try {
+        const { category, type, status, search, page = 1 } = req.query;
+        let allEvents = await contentService.getAllEvents();
+        
+        // Filter by category if specified
+        if (category && category !== 'all') {
+            allEvents = await contentService.getEventsByCategory(category);
+        }
+        
+        // Filter by status if specified
+        if (status && status !== 'all') {
+            allEvents = await contentService.getEventsByStatus(status);
+        }
+        
+        // Search functionality
+        if (search) {
+            allEvents = allEvents.filter(event =>
+                event.title.toLowerCase().includes(search.toLowerCase()) ||
+                (event.description && event.description.toLowerCase().includes(search.toLowerCase()))
+            );
+        }
+        
+        // Pagination
+        const eventsPerPage = 6;
+        const totalEvents = allEvents.length;
+        const totalPages = Math.ceil(totalEvents / eventsPerPage);
+        const currentPage = Math.max(1, Math.min(page, totalPages));
+        const startIndex = (currentPage - 1) * eventsPerPage;
+        const endIndex = startIndex + eventsPerPage;
+        const paginatedEvents = allEvents.slice(startIndex, endIndex);
+        
+        res.render('events', {
+            title: 'Upcoming Events - ANRG Laboratory',
+            currentPage: 'events',
+            events: paginatedEvents,
+            categories: contentService.getEventCategories(),
+            types: contentService.getEventTypes(),
+            selectedCategory: category || 'all',
+            selectedType: type || 'all',
+            selectedStatus: status || 'all',
+            searchQuery: search || '',
+            pagination: {
+                current: currentPage,
+                total: totalPages,
+                hasNext: currentPage < totalPages,
+                hasPrev: currentPage > 1,
+                nextPage: currentPage + 1,
+                prevPage: currentPage - 1
+            },
+            totalEvents: totalEvents
+        });
+    } catch (error) {
+        console.error('Error loading events page:', error);
+        res.render('events', {
+            title: 'Upcoming Events - ANRG Laboratory',
+            currentPage: 'events',
+            events: [],
+            categories: contentService.getEventCategories(),
+            types: contentService.getEventTypes(),
+            selectedCategory: 'all',
+            selectedType: 'all',
+            selectedStatus: 'all',
+            searchQuery: '',
+            pagination: {
+                current: 1,
+                total: 1,
+                hasNext: false,
+                hasPrev: false,
+                nextPage: 1,
+                prevPage: 1
+            },
+            totalEvents: 0
+        });
     }
-    
-    // Filter by type if specified
-    if (type && type !== 'all') {
-        allEvents = eventData.getEventsByType(type);
-    }
-    
-    // Filter by status if specified
-    if (status && status !== 'all') {
-        allEvents = eventData.getEventsByStatus(status);
-    }
-    
-    // Search functionality
-    if (search) {
-        allEvents = eventData.searchEvents(search);
-    }
-    
-    // Pagination
-    const eventsPerPage = 6;
-    const totalEvents = allEvents.length;
-    const totalPages = Math.ceil(totalEvents / eventsPerPage);
-    const currentPage = Math.max(1, Math.min(page, totalPages));
-    const startIndex = (currentPage - 1) * eventsPerPage;
-    const endIndex = startIndex + eventsPerPage;
-    const paginatedEvents = allEvents.slice(startIndex, endIndex);
-    
-    res.render('events', {
-        title: 'Upcoming Events - MBC Laboratory',
-        currentPage: 'events',
-        events: paginatedEvents,
-        categories: eventData.getEventCategories(),
-        types: eventData.getEventTypes(),
-        selectedCategory: category || 'all',
-        selectedType: type || 'all',
-        selectedStatus: status || 'all',
-        searchQuery: search || '',
-        pagination: {
-            current: currentPage,
-            total: totalPages,
-            hasNext: currentPage < totalPages,
-            hasPrev: currentPage > 1,
-            nextPage: currentPage + 1,
-            prevPage: currentPage - 1
-        },
-        totalEvents: totalEvents
-    });
 });
 
-app.get('/events/:slug', (req, res) => {
-    const event = eventData.getEventBySlug(req.params.slug);
-    
-    if (!event) {
-        return res.status(404).render('404', {
-            title: 'Event Not Found - MBC Laboratory',
+app.get('/events/:slug', async (req, res) => {
+    try {
+        const event = await contentService.getEventBySlug(req.params.slug);
+        
+        if (!event) {
+            return res.status(404).render('404', {
+                title: 'Event Not Found - ANRG Laboratory',
+                currentPage: 'events'
+            });
+        }
+        
+        const relatedEvents = await contentService.getRelatedEvents(event.id, 3);
+        const availableSpots = event.maxParticipants - event.currentParticipants;
+        const isAvailable = availableSpots > 0;
+        
+        res.render('event-detail', {
+            title: `${event.title} - ANRG Laboratory`,
+            currentPage: 'events',
+            event: event,
+            relatedEvents: relatedEvents,
+            availableSpots: availableSpots,
+            isAvailable: isAvailable,
+            currentUrl: req.protocol + '://' + req.get('host') + req.originalUrl
+        });
+    } catch (error) {
+        console.error('Error loading event detail:', error);
+        res.status(404).render('404', {
+            title: 'Event Not Found - ANRG Laboratory',
             currentPage: 'events'
         });
     }
-    
-    const relatedEvents = eventData.getRelatedEvents(event.id, 3);
-    const availableSpots = eventData.getAvailableSpots(event.id);
-    const isAvailable = eventData.isEventAvailable(event.id);
-    
-    res.render('event-detail', {
-        title: `${event.title} - MBC Laboratory`,
-        currentPage: 'events',
-        event: event,
-        relatedEvents: relatedEvents,
-        availableSpots: availableSpots,
-        isAvailable: isAvailable,
-        currentUrl: req.protocol + '://' + req.get('host') + req.originalUrl
-    });
-});
-
-// Admin dashboard page
-app.get('/admin', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'admin-dashboard.html'));
 });
 
 // Contact form handler with email functionality
@@ -257,15 +361,22 @@ app.post('/contact', async (req, res) => {
     }
     
     try {
-        // Save to database
-        await contactDB.saveContactForm({ name, email, message, service });
+        // Save to database using MySQL adminDB
+        const savedContact = await adminDB.saveContact({ 
+            name, 
+            email, 
+            message, 
+            service,
+            ip: clientIP 
+        });
+        
         console.log('💾 Contact form submission saved to database');
 
         // Email to admin
         const adminTemplate = emailTemplates.adminNotification({ name, email, message, service });
         const adminMailOptions = {
             from: email,
-            to: process.env.ADMIN_EMAIL || 'admin@mbclaboratory.com',
+            to: process.env.ADMIN_EMAIL || 'admin@anrglaboratory.com',
             subject: adminTemplate.subject,
             html: adminTemplate.html
         };
@@ -273,7 +384,7 @@ app.post('/contact', async (req, res) => {
         // Confirmation email to user
         const userTemplate = emailTemplates.userConfirmation({ name, email, message, service });
         const userMailOptions = {
-            from: process.env.EMAIL_USER || 'noreply@mbclaboratory.com',
+            from: process.env.EMAIL_USER || 'noreply@anrglaboratory.com',
             to: email,
             subject: userTemplate.subject,
             html: userTemplate.html
@@ -281,16 +392,13 @@ app.post('/contact', async (req, res) => {
 
         // Send emails jika email sudah dikonfigurasi
         if (process.env.EMAIL_USER && process.env.EMAIL_PASS && 
-            process.env.EMAIL_USER !== 'demo@mbclaboratory.com') {
+            process.env.EMAIL_USER !== 'demo@anrglaboratory.com') {
             await transporter.sendMail(adminMailOptions);
             await transporter.sendMail(userMailOptions);
             console.log('📧 Emails sent successfully!');
         } else {
             console.log('📧 Email not configured - check .env file');
         }
-        
-        // Save to database
-        const savedContact = contactDB.saveContact({ name, email, message, service });
         
         // Log to terminal (for demonstration)
         console.log('=== Contact Form Submission ===');
@@ -304,7 +412,7 @@ app.post('/contact', async (req, res) => {
         console.log('==============================');
         
         res.render('contact', { 
-            title: 'Contact Us - MBC Laboratory',
+            title: 'Contact Us - ANRG Laboratory',
             currentPage: 'contact',
             success: 'Thank you for your message! We will contact you soon.',
             formData: { name, email, message, service }
@@ -312,7 +420,7 @@ app.post('/contact', async (req, res) => {
     } catch (error) {
         console.error('Error handling contact form submission:', error);
         res.render('contact', { 
-            title: 'Contact Us - MBC Laboratory',
+            title: 'Contact Us - ANRG Laboratory',
             currentPage: 'contact',
             error: 'Sorry, there was an error sending your message. Please try again.',
             formData: { name, email, message, service }
@@ -387,13 +495,40 @@ app.use((req, res) => {
     });
 });
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`🌐 MBC Laboratory website running on http://localhost:${PORT}`);
-    console.log(`🚀 Website ready! Open your browser and visit the URL above`);
-    console.log(`📄 Available pages:`);
-    console.log(`   • Home: http://localhost:${PORT}/`);
-    console.log(`   • Services: http://localhost:${PORT}/services`);
-    console.log(`   • Contact: http://localhost:${PORT}/contact`);
-    console.log(`   • Developer: http://localhost:${PORT}/developer`);
-});
+// Start server with database initialization
+async function startServer() {
+    try {
+        // Test database connection
+        const isConnected = await testConnection();
+        if (!isConnected) {
+            console.error('❌ Cannot start server - database connection failed');
+            process.exit(1);
+        }
+        
+        // Initialize database tables
+        await initializeTables();
+        
+        // Start the server
+        app.listen(PORT, () => {
+            console.log(`🌐 ANRG Laboratory website running on http://localhost:${PORT}`);
+            console.log(`🚀 Website ready! Open your browser and visit the URL above`);
+            console.log(`📄 Available pages:`);
+            console.log(`   • Home: http://localhost:${PORT}/`);
+            console.log(`   • Services: http://localhost:${PORT}/services`);
+            console.log(`   • Contact: http://localhost:${PORT}/contact`);
+            console.log(`   • News: http://localhost:${PORT}/news`);
+            console.log(`   • Events: http://localhost:${PORT}/events`);
+            console.log(`   • Team: http://localhost:${PORT}/team`);
+            console.log(`   • Developer: http://localhost:${PORT}/developer`);
+            console.log(`🔧 Admin Panel:`);
+            console.log(`   • Login: http://localhost:${PORT}/admin/login`);
+            console.log(`   • Dashboard: http://localhost:${PORT}/admin`);
+        });
+    } catch (error) {
+        console.error('❌ Server startup failed:', error);
+        process.exit(1);
+    }
+}
+
+// Start the server
+startServer();

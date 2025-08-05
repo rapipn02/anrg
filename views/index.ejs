@@ -17,10 +17,12 @@
     <%- include('partials/navbar') %>
 
     <!-- Hero Section -->
-    <section class="hero-section relative min-h-screen flex items-center justify-center overflow-hidden">
-        <!-- Background -->
-        <div class="absolute inset-0 gradient-bg"></div>
-        <div class="absolute inset-0 bg-black/40"></div>
+    <section class="hero-section relative min-h-screen flex items-center overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0">
+            <img src="/asep.jpg" alt="ANRG Laboratory Background" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30"></div>
+        </div>
         
         <!-- Animated Background Elements -->
         <div class="absolute inset-0">
@@ -29,20 +31,18 @@
         </div>
         
         <!-- Content -->
-        <div class="relative z-10 container-custom text-center">
-            <div class="max-w-4xl mx-auto">
-                <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 animate-fade-in">
-                    <span class="block">ANRG</span>
-                    <span class="text-mint">Laboratory</span>
+        <div class="relative z-10 container-custom">
+            <div class="max-w-4xl">
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 animate-fade-in">
+                    Advanced Network Research Group
                 </h1>
                 <h2 class="text-xl md:text-2xl text-cyber font-medium mb-8 animate-fade-in animation-delay-200">
-                   Selamat Datang di Website Advanced Network Research Group
+                   Grup riset yang berfokus pada pengembangan solusi di bidang Software, Jaringan, Cyber Security, dan AI/ML
                 </h2>
                 
+
             </div>
         </div>
-        
-
 
         <!-- Scroll Indicator -->
         <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
@@ -299,7 +299,7 @@
                 <% upcomingEvents.slice(0, 3).forEach(function(event, index) { %>
                 <article class="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden border border-gray-100" data-aos="fade-up" data-aos-delay="<%= (index + 1) * 100 %>">
                     <div class="relative overflow-hidden h-48">
-                        <img src="<%= event.image %>" alt="<%= event.title %>" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
+                        <img src="<%= event.imageUrl %>" alt="<%= event.title %>" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105">
                         <div class="absolute top-4 left-4">
                             <span class="bg-<%= event.category === 'workshop' ? 'blue' : event.category === 'seminar' ? 'green' : event.category === 'conference' ? 'purple' : 'yellow' %>-500 text-white px-3 py-1 rounded-full text-sm font-medium">
                                 <%= event.category.charAt(0).toUpperCase() + event.category.slice(1) %>
@@ -344,7 +344,7 @@
                                 <span><%= event.type === 'online' ? 'Online' : event.type === 'offline' ? event.location : 'Hybrid' %></span>
                             </div>
                             <div class="text-primary font-bold text-lg">
-                                <% if (event.price === 0) { %>
+                                <% if (!event.price || event.price === 0) { %>
                                     Free
                                 <% } else { %>
                                     Rp <%= event.price.toLocaleString('id-ID') %>
