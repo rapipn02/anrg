@@ -849,6 +849,19 @@
             localStorage.removeItem('adminToken');
             window.location.href = '/admin/login';
         }
+
+        // Logout button event listener for sidebar
+        document.addEventListener('DOMContentLoaded', function() {
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (confirm('Are you sure you want to logout?')) {
+                        logout();
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>
